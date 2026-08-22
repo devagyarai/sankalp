@@ -47,7 +47,7 @@ export default function WatchPage() {
                  <div>
                    <h5 className="text-rose-400 font-medium text-sm mb-1">Suspicious URL Structure</h5>
                    <p className="text-muted-foreground text-sm">
-                     The domain uses excessive hyphens and attempts to mimic a security alert, which is a common phishing pattern. It is not associated with any known legitimate provider.
+                     When something breaks in the middle of a study session, the last thing you want is &quot;Try again later.&quot; The domain uses excessive hyphens and attempts to mimic a security alert, which is a common phishing pattern. It is not associated with any known legitimate provider.
                    </p>
                  </div>
                </div>

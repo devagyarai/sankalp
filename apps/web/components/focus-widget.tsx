@@ -2,19 +2,21 @@
 
 import * as React from "react"
 import { motion } from "framer-motion"
-import { Calendar, CheckCircle, Clock, BookOpen } from "lucide-react"
-import { Task } from "@/lib/nba-engine"
+import { CheckCircle, BookOpen } from "lucide-react"
+import { IntelligenceRecommendationSchema } from "@/types/intelligence"
 import { LivingCard } from "./ui/living-card"
-import { Badge } from "./ui/badge"
+import { Badge } from "./ui/Badge"
 import { cn } from "@/lib/utils"
 
 interface FocusWidgetProps {
-  tasks: Task[]
+  recommendations: IntelligenceRecommendationSchema[]
 }
 
-export function FocusWidget({ tasks }: FocusWidgetProps) {
-  // Sort tasks by risk score descending
-  const sortedTasks = [...tasks].sort((a, b) => b.riskScore - a.riskScore)
+export function FocusWidget({ recommendations }: FocusWidgetProps) {
+  // Filter for focus domain and sort by priority
+  const focusRecs = recommendations
+    .filter(r => r.domain.toLowerCase() === 'focus')
+    .sort((a, b) => b.confidence - a.confidence)
 
   return (
     <LivingCard glowColor="blue" className="h-full border-border/50">
@@ -29,13 +31,15 @@ export function FocusWidget({ tasks }: FocusWidgetProps) {
       </div>
 
       <div className="space-y-4">
-        {sortedTasks.map((task, idx) => {
-          const isCritical = task.riskScore > 80;
-          const progress = (task.completedHours / task.estimatedHours) * 100;
+        {focusRecs.length === 0 ? (
+          <div className="text-sm text-muted-foreground p-4 text-center">No focus recommendations currently.</div>
+        ) : focusRecs.map((rec, idx) => {
+          const isCritical = rec.priority === "critical";
+          const progress = rec.confidence * 100;
           
           return (
             <motion.div
-              key={task.id}
+              key={rec.title}
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: idx * 0.1, duration: 0.4 }}
@@ -47,28 +51,23 @@ export function FocusWidget({ tasks }: FocusWidgetProps) {
               
               <div className="flex justify-between items-start mb-2 ml-1">
                 <h4 className={cn("font-medium text-sm", isCritical ? "text-red-100" : "text-foreground")}>
-                  {task.title}
+                  {rec.title}
                 </h4>
                 <Badge 
-                  variant={isCritical ? "destructive" : task.urgencyLevel === "medium" ? "warning" : "default"}
+                  variant={isCritical ? "destructive" : rec.priority === "high" ? "warning" : "default"}
                   className="text-[10px] uppercase h-5"
                 >
-                  {task.urgencyLevel} Priority
+                  {rec.priority} Priority
                 </Badge>
               </div>
               
               <div className="flex items-center gap-4 text-xs text-muted-foreground ml-1">
                 <div className="flex items-center gap-1">
-                  <Calendar className="w-3 h-3" />
-                  <span>{task.dueDate.split('T')[0]}</span>
-                </div>
-                <div className="flex items-center gap-1">
-                  <Clock className="w-3 h-3" />
-                  <span>{task.estimatedHours - task.completedHours}h left</span>
+                  <span>{rec.reason}</span>
                 </div>
               </div>
 
-              {/* Progress Bar */}
+              {/* Progress Bar (mapped to confidence) */}
               <div className="mt-4 ml-1 h-1.5 w-full bg-white/5 rounded-full overflow-hidden relative">
                 <motion.div 
                   initial={{ width: 0 }}

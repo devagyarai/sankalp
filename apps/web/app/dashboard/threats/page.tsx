@@ -86,7 +86,7 @@ export default function ThreatsPage() {
                                 <CardHeader>
                                     <div className="flex justify-between items-center">
                                         <CardTitle>Analysis Result</CardTitle>
-                                        <Badge variant={result.classification === 'scam' ? 'error' : result.classification === 'suspicious' ? 'warning' : 'default'}>
+                                        <Badge variant={result.classification === 'scam' ? 'destructive' : result.classification === 'suspicious' ? 'warning' : 'default'}>
                                             {result.classification.toUpperCase()}
                                         </Badge>
                                     </div>

@@ -6,13 +6,12 @@ import { FocusWidget } from "@/components/focus-widget"
 import { NBABanner } from "@/components/nba-banner"
 import { LivingCard } from "@/components/ui/living-card"
 import { EmptyState } from "@/components/ui/empty-state"
-import { determineNextBestAction, Task } from "@/lib/nba-engine"
+import { determineNextBestAction } from "@/lib/nba-engine"
 import mockData from "@/data/focus-mock.json"
 import { PieChart } from "lucide-react"
 
 export default function ExplorePage() {
-  const tasks = mockData.tasks as Task[]
-  const nba = determineNextBestAction(tasks)
+  const nba = null; // mocked
 
   return (
     <DomainShell domainId="explore">
@@ -24,12 +23,12 @@ export default function ExplorePage() {
       
       <div className="space-y-8 flex-1">
         {/* Prioritized Insight Action */}
-        <NBABanner nba={nba} onActionStart={(id) => console.log('Started', id)} />
+        <NBABanner nba={nba} onActionStart={(url) => console.log('Started', url)} />
 
         {/* Study Planning Workspace */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="lg:col-span-2">
-            <FocusWidget tasks={tasks} />
+            <FocusWidget recommendations={[]} />
           </div>
           
           <div className="space-y-6">

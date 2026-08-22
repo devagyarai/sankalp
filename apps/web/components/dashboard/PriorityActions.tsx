@@ -31,7 +31,7 @@ export function PriorityActions({ recommendations }: { recommendations: Intellig
                             <div className="flex items-start justify-between gap-4">
                                 <div>
                                     <div className="flex items-center gap-2 mb-1">
-                                        <Badge variant={rec.priority === 'critical' ? 'error' : rec.priority === 'high' ? 'warning' : 'default'}>
+                                        <Badge variant={rec.priority === 'critical' ? 'destructive' : rec.priority === 'high' ? 'warning' : 'default'}>
                                             {rec.priority} priority
                                         </Badge>
                                         <span className="text-xs text-gray-400 uppercase font-semibold">{rec.domain}</span>
@@ -41,7 +41,7 @@ export function PriorityActions({ recommendations }: { recommendations: Intellig
                                 </div>
                                 {rec.action_url && (
                                     <Link href={rec.action_url}>
-                                        <Button variant="secondary" className="text-xs">Take Action</Button>
+                                        <Button variant="default" className="text-xs">Take Action</Button>
                                     </Link>
                                 )}
                             </div>

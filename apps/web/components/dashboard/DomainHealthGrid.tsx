@@ -33,7 +33,7 @@ export function DomainHealthGrid({ scores, trends, dataQuality }: DomainHealthGr
                             <CardTitle className="text-sm uppercase tracking-wider text-gray-500 flex justify-between items-center">
                                 {d.name}
                                 {trend && trend.direction !== "INSUFFICIENT_DATA" && (
-                                    <Badge variant={trend.direction === "IMPROVING" ? "success" : trend.direction === "DECLINING" ? "error" : "neutral"}>
+                                    <Badge variant={trend.direction === "IMPROVING" ? "success" : trend.direction === "DECLINING" ? "destructive" : "secondary"}>
                                         {trend.direction}
                                     </Badge>
                                 )}

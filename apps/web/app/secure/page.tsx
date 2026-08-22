@@ -110,7 +110,7 @@ export default function SecurePage() {
                     </button>
                   </div>
                   <p className="text-sm text-muted-foreground">
-                    3 connected applications have access to your calendar and contacts that haven't been used in over 6 months.
+                      If SANKALP detects any unusual patterns—like logins from a new country or suspicious API access requests—the SHIELD domain locks down the environment instantly. You&apos;ll be alerted immediately.
                   </p>
                 </div>
               </div>

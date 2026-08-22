@@ -3,14 +3,14 @@
 import * as React from "react"
 import { motion } from "framer-motion"
 import { AlertTriangle, ArrowRight, CheckCircle2, Play } from "lucide-react"
-import { NextBestAction } from "@/lib/nba-engine"
+import { IntelligenceRecommendationSchema } from "@/types/intelligence"
 import { GlassCard } from "./ui/glass-card"
-import { Button } from "./ui/button"
-import { Badge } from "./ui/badge"
+import { Button } from "./ui/Button"
+import { Badge } from "./ui/Badge"
 
 interface NBABannerProps {
-  nba: NextBestAction | null
-  onActionStart: (taskId: string) => void
+  nba: IntelligenceRecommendationSchema | null
+  onActionStart: (actionUrl: string) => void
 }
 
 export function NBABanner({ nba, onActionStart }: NBABannerProps) {
@@ -35,16 +35,16 @@ export function NBABanner({ nba, onActionStart }: NBABannerProps) {
                 Next Best Action
               </Badge>
               <span className="text-sm text-muted-foreground font-medium uppercase tracking-wider">
-                Focus Domain
+                {nba.domain} Domain
               </span>
             </div>
             
             <div>
               <h2 className="text-2xl font-bold glow-text text-primary-foreground mb-2">
-                Study {nba.task.title} for {nba.recommendedDuration} minutes
+                {nba.title}
               </h2>
               <p className="text-muted-foreground leading-relaxed max-w-2xl">
-                {nba.actionReasoning}
+                {nba.reason}
               </p>
             </div>
           </div>
@@ -54,7 +54,7 @@ export function NBABanner({ nba, onActionStart }: NBABannerProps) {
               variant="glowing" 
               size="lg" 
               className="gap-2 w-full sm:w-auto"
-              onClick={() => onActionStart(nba.task.id)}
+              onClick={() => onActionStart(nba.action_url || "#")}
             >
               <Play className="w-4 h-4" fill="currentColor" />
               Start Action

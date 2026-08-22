@@ -5,9 +5,9 @@ import { Insight } from '@/types/intelligence';
 
 export function CrossDomainInsightCard({ insight }: { insight: Insight }) {
     const getSeverityBadge = (severity: number) => {
-        if (severity >= 80) return <Badge variant="error">Critical</Badge>;
+        if (severity >= 80) return <Badge variant="destructive">Critical</Badge>;
         if (severity >= 60) return <Badge variant="warning">High</Badge>;
-        if (severity >= 40) return <Badge variant="neutral">Medium</Badge>;
+        if (severity >= 40) return <Badge variant="secondary">Medium</Badge>;
         return <Badge variant="default">Low</Badge>;
     };
 
