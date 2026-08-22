@@ -1,13 +1,13 @@
 import { apiClient } from '../api/client';
 import { StandardResponse } from '../api/types';
-import { UserResponse } from './auth-types';
+import { LoginRequest, RegisterRequest, UserResponse } from './auth-types';
 
 class AuthClient {
-    async register(data: unknown): Promise<StandardResponse<UserResponse>> {
+    async register(data: RegisterRequest): Promise<StandardResponse<UserResponse>> {
         return apiClient.post<StandardResponse<UserResponse>>('/auth/register', data);
     }
 
-    async login(data: unknown): Promise<StandardResponse<UserResponse>> {
+    async login(data: LoginRequest): Promise<StandardResponse<UserResponse>> {
         return apiClient.post<StandardResponse<UserResponse>>('/auth/login', data);
     }
 
