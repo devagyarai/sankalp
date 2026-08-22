@@ -5,7 +5,8 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { authClient } from '@/lib/auth/auth-client';
 import { UserResponse } from '@/lib/auth/auth-types';
-import { Activity, Bell, Compass, LayoutDashboard, Shield, ShieldAlert, Settings, User, LogOut, Rocket } from "lucide-react";
+import { Activity, Bell, Compass, LayoutDashboard, Shield, ShieldAlert, Settings, User, LogOut, Rocket, ChevronUp, Check } from "lucide-react";
+import { useAuth } from '@/lib/auth-context';
 import { cn } from "@/lib/utils";
 import { ChatWidget } from '@/components/chatbot/ChatWidget';
 
@@ -22,37 +23,11 @@ const NAVIGATION = [
 export function StitchAppLayout({ children }: { children: React.ReactNode }) {
     const pathname = usePathname();
     const router = useRouter();
-    const [user, setUser] = useState<UserResponse | null>(null);
-    const [loading, setLoading] = useState(true);
+    const { currentUser, users, setCurrentUser } = useAuth();
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
-    useEffect(() => {
-        // For the dummy view, we'll bypass real authentication so you can preview the UI easily.
-        const mockUser = {
-            id: 'mock-123',
-            email: 'admin@sankalp.workspace',
-            role: 'COMMANDER'
-        };
-        setUser(mockUser);
-        setLoading(false);
-    }, []);
+    // No longer loading since we are using synchronous AuthContext
 
-    const handleLogout = async () => {
-        await authClient.logout();
-        router.push('/login');
-    };
-
-    if (loading) {
-        return (
-            <div className="flex min-h-screen items-center justify-center bg-black">
-                <div className="flex flex-col items-center gap-4">
-                    <Rocket className="w-8 h-8 text-[#00e5ff] animate-bounce" />
-                    <p className="text-[#00e5ff] font-medium tracking-widest uppercase text-sm animate-pulse">Engaging Cypherverse...</p>
-                </div>
-            </div>
-        );
-    }
-
-    if (!user) return null;
 
     return (
         <div className="min-h-screen bg-black text-slate-100 flex flex-col md:flex-row overflow-hidden relative font-sans selection:bg-[#00e5ff]/30 selection:text-white">
@@ -82,27 +57,49 @@ export function StitchAppLayout({ children }: { children: React.ReactNode }) {
                     })}
                 </nav>
 
-                <div className="hidden md:flex p-4 mt-auto border-t border-zinc-900 flex-col gap-2">
-                    <div className="flex items-center gap-3 w-full p-2 rounded-xl hover:bg-zinc-900/80 cursor-pointer transition-colors border border-transparent hover:border-[#00e5ff]/20">
-                        <div className="w-8 h-8 rounded-full bg-[#00e5ff]/10 border border-[#00e5ff]/30 flex items-center justify-center shrink-0">
-                            <User className="w-4 h-4 text-[#00e5ff]" />
+                <div className="hidden md:flex p-4 mt-auto border-t border-zinc-900 flex-col gap-2 relative">
+                    
+                    {/* Role Switcher Dropdown Menu */}
+                    {isDropdownOpen && (
+                        <div className="absolute bottom-full left-4 right-4 mb-2 bg-black border border-zinc-800 rounded-xl p-2 shadow-[0_0_30px_rgba(0,0,0,0.8)] z-50">
+                            <div className="text-[10px] font-black uppercase tracking-widest text-zinc-500 mb-2 px-2">Switch Identity</div>
+                            {users.map(u => (
+                                <div 
+                                    key={u.id}
+                                    onClick={() => {
+                                        setCurrentUser(u);
+                                        setIsDropdownOpen(false);
+                                    }}
+                                    className={`flex items-center justify-between p-2 rounded-lg cursor-pointer transition-colors hover:bg-zinc-900 ${currentUser.id === u.id ? 'bg-zinc-900' : ''}`}
+                                >
+                                    <div className="flex items-center gap-3 overflow-hidden">
+                                        <div className={`w-6 h-6 rounded-full flex items-center justify-center shrink-0 ${u.avatarColor}/20 border border-transparent`}>
+                                            <User className={`w-3 h-3 ${u.avatarColor.replace('bg-', 'text-')}`} />
+                                        </div>
+                                        <div className="flex flex-col truncate">
+                                            <span className="text-xs font-bold text-white truncate">{u.name}</span>
+                                            <span className={`text-[9px] font-black tracking-widest uppercase ${u.role === 'COMMANDER' ? 'text-[#00e5ff]' : 'text-zinc-500'}`}>{u.role}</span>
+                                        </div>
+                                    </div>
+                                    {currentUser.id === u.id && <Check className="w-4 h-4 text-[#00e5ff]" />}
+                                </div>
+                            ))}
+                        </div>
+                    )}
+
+                    <div 
+                        onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                        className="flex items-center gap-3 w-full p-2 rounded-xl bg-zinc-900/50 hover:bg-zinc-900 cursor-pointer transition-colors border border-zinc-800 hover:border-[#00e5ff]/30"
+                    >
+                        <div className={`w-8 h-8 rounded-full ${currentUser.avatarColor}/10 border border-transparent flex items-center justify-center shrink-0`}>
+                            <User className={`w-4 h-4 ${currentUser.avatarColor.replace('bg-', 'text-')}`} />
                         </div>
                         <div className="flex-1 overflow-hidden">
-                            <p className="text-sm font-bold truncate text-zinc-200">{user.email.split('@')[0]}</p>
-                            <p className="text-xs text-zinc-500 font-medium truncate uppercase tracking-wider">{user.role}</p>
+                            <p className="text-sm font-bold truncate text-white">{currentUser.name}</p>
+                            <p className={`text-[10px] font-black tracking-widest uppercase ${currentUser.role === 'COMMANDER' ? 'text-[#00e5ff]' : 'text-zinc-500'}`}>{currentUser.role}</p>
                         </div>
-                        <Settings className="w-4 h-4 text-zinc-500 hover:text-[#00e5ff] shrink-0 transition-colors" />
+                        <ChevronUp className={`w-4 h-4 text-zinc-500 shrink-0 transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`} />
                     </div>
-                    
-                    <button 
-                        onClick={handleLogout}
-                        className="flex items-center gap-3 w-full p-2 rounded-xl text-zinc-500 hover:bg-red-500/10 hover:text-red-400 cursor-pointer transition-colors border border-transparent hover:border-red-500/20"
-                    >
-                        <div className="w-8 h-8 flex items-center justify-center shrink-0">
-                            <LogOut className="w-4 h-4" />
-                        </div>
-                        <span className="text-sm font-bold uppercase tracking-wider">Abort Session</span>
-                    </button>
                 </div>
             </aside>
 
