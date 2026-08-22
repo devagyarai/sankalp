@@ -1,120 +1,237 @@
 "use client"
 
+import { useState } from "react"
 import { StitchDomainShell } from "@/components/stitch/stitch-domain-shell"
 import { StitchDomainHeader } from "@/components/stitch/stitch-domain-header"
 import { StitchGlassCard } from "@/components/stitch/stitch-glass-card"
-import { Share2, Server, Globe, Search, Database } from "lucide-react"
-import { motion } from "framer-motion"
+import { Search, Link as LinkIcon, Database, Filter, Loader2, Network } from "lucide-react"
+import { motion, AnimatePresence } from "framer-motion"
 
-export default function StitchConnectPage() {
+export default function ConnectPage() {
+  const [isInitialized, setIsInitialized] = useState(false)
+  const [isInitializing, setIsInitializing] = useState(false)
+  const [searchQuery, setSearchQuery] = useState("")
+
+  const handleInitialize = () => {
+    setIsInitializing(true)
+    setTimeout(() => {
+      setIsInitializing(false)
+      setIsInitialized(true)
+    }, 2500)
+  }
+
+  const nodes = [
+    { id: 1, label: "Core Academic DB", type: "primary", x: "50%", y: "50%" },
+    { id: 2, label: "GitHub Commits", type: "secondary", x: "20%", y: "30%" },
+    { id: 3, label: "LeetCode Stats", type: "secondary", x: "80%", y: "40%" },
+    { id: 4, label: "Browsing Habits", type: "tertiary", x: "30%", y: "70%" },
+    { id: 5, label: "Focus Timer Logs", type: "tertiary", x: "70%", y: "80%" },
+  ]
+
+  const edges = [
+    { from: 1, to: 2 },
+    { from: 1, to: 3 },
+    { from: 1, to: 4 },
+    { from: 1, to: 5 },
+    { from: 2, to: 4 },
+    { from: 3, to: 5 },
+  ]
+
+  const entities = [
+    { name: "Academic Portfolio", status: "Active" },
+    { name: "Code Repositories", status: "Active" },
+    { name: "Time Tracking", status: "Active" },
+    { name: "Security Audits", status: "Dormant" },
+  ]
+
+  const filteredEntities = entities.filter(e => e.name.toLowerCase().includes(searchQuery.toLowerCase()))
+
   return (
     <StitchDomainShell domainId="connect">
       <StitchDomainHeader 
         domainId="connect"
-        title="See the hidden connections."
-        description="Correlate seemingly unrelated signals, domains, and entities to uncover broader scam networks and campaigns in the Cypherverse."
+        title="Map the relationships between your digital identities."
+        description="Visualize and query the interconnected nodes of your data across the Cypherverse."
       />
       
-      <div className="flex-1 grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="flex-1 grid grid-cols-1 lg:grid-cols-4 gap-6">
         
-        {/* Network Graph Visualization (Placeholder) */}
-        <div className="lg:col-span-2 space-y-6">
-          <StitchGlassCard className="min-h-[500px] h-full flex flex-col justify-between overflow-hidden relative border-[#7c4dff]/30 hover:border-[#7c4dff]/50 hover:shadow-[0_0_40px_rgba(124,77,255,0.15)]">
-            <h3 className="text-lg font-black tracking-widest text-white mb-6 flex items-center gap-3 uppercase relative z-10">
-              <div className="p-2 rounded-xl bg-[#7c4dff]/10 border border-[#7c4dff]/30">
-                <Share2 className="w-5 h-5 text-[#7c4dff]" />
-              </div>
-              Intelligence Graph
-            </h3>
+        {/* Intelligence Graph Workspace */}
+        <div className="lg:col-span-3">
+          <StitchGlassCard className={`h-full min-h-[500px] flex flex-col relative overflow-hidden transition-colors duration-1000 ${isInitialized ? 'border-[#7c4dff]/40 shadow-[0_0_40px_rgba(124,77,255,0.15)]' : 'border-[#7c4dff]/20'}`}>
             
-            <div className="flex-1 flex items-center justify-center relative">
-               {/* Decorative Abstract Graph Lines */}
-               <svg className="absolute inset-0 w-full h-full pointer-events-none opacity-20" preserveAspectRatio="none">
-                 <path d="M 20% 30% L 50% 50% L 80% 40% L 60% 70% Z" fill="none" stroke="#7c4dff" strokeWidth="2" strokeDasharray="4 4" />
-                 <path d="M 50% 50% L 30% 80%" fill="none" stroke="#00e5ff" strokeWidth="1.5" />
-                 <path d="M 80% 40% L 90% 20%" fill="none" stroke="#f50057" strokeWidth="1.5" />
-               </svg>
-               
-               {/* Nodes */}
-               <motion.div animate={{ scale: [1, 1.2, 1], opacity: [0.8, 1, 0.8] }} transition={{ duration: 3, repeat: Infinity }} className="absolute top-[30%] left-[20%] w-3 h-3 bg-[#7c4dff] rounded-full shadow-[0_0_15px_#7c4dff]" />
-               <motion.div animate={{ scale: [1, 1.1, 1], boxShadow: ["0 0 20px rgba(124,77,255,0.3)", "0 0 40px #7c4dff", "0 0 20px rgba(124,77,255,0.3)"] }} transition={{ duration: 4, repeat: Infinity }} className="absolute top-[50%] left-[50%] w-5 h-5 bg-black rounded-full border-[3px] border-[#7c4dff] cursor-pointer" />
-               <motion.div animate={{ scale: [1, 1.3, 1], opacity: [0.7, 1, 0.7] }} transition={{ duration: 2.5, repeat: Infinity, delay: 0.5 }} className="absolute top-[40%] left-[80%] w-3 h-3 bg-[#f50057] rounded-full shadow-[0_0_15px_#f50057]" />
-               <motion.div animate={{ scale: [1, 1.2, 1], opacity: [0.6, 1, 0.6] }} transition={{ duration: 2, repeat: Infinity, delay: 1 }} className="absolute top-[70%] left-[60%] w-3 h-3 bg-red-500 rounded-full shadow-[0_0_15px_#ef4444]" />
-               <motion.div animate={{ scale: [1, 1.2, 1], opacity: [0.8, 1, 0.8] }} transition={{ duration: 3.5, repeat: Infinity, delay: 1.5 }} className="absolute top-[80%] left-[30%] w-3 h-3 bg-[#00e5ff] rounded-full shadow-[0_0_15px_#00e5ff]" />
-               <div className="absolute top-[20%] left-[90%] w-2 h-2 bg-white/20 rounded-full" />
+            <div className="absolute inset-0 bg-[#7c4dff]/5 pointer-events-none" />
+            <div className="absolute inset-0 pointer-events-none opacity-10" 
+                 style={{ backgroundImage: 'linear-gradient(#7c4dff 1px, transparent 1px), linear-gradient(90deg, #7c4dff 1px, transparent 1px)', backgroundSize: '50px 50px' }} 
+            />
 
-               <div className="text-center relative z-10 bg-black/60 backdrop-blur-md p-8 rounded-2xl border border-[#7c4dff]/20 max-w-sm shadow-[0_0_30px_rgba(0,0,0,0.8)]">
-                 <div className="w-16 h-16 rounded-full bg-[#7c4dff]/10 border border-[#7c4dff]/30 flex items-center justify-center mx-auto mb-6">
-                   <Server className="w-8 h-8 text-[#7c4dff]" />
+            <div className="flex items-center justify-between mb-8 relative z-10 p-2">
+              <h3 className="text-lg font-black tracking-widest text-white uppercase flex items-center gap-3">
+                <div className="p-2 rounded-xl bg-[#7c4dff]/10 border border-[#7c4dff]/30">
+                  <Network className={`w-5 h-5 text-[#7c4dff] ${isInitialized ? 'animate-pulse' : ''}`} />
+                </div>
+                Intelligence Graph
+              </h3>
+
+              {!isInitialized ? (
+                <button 
+                  onClick={handleInitialize}
+                  disabled={isInitializing}
+                  className={`px-5 py-2.5 rounded-xl text-xs font-bold uppercase tracking-widest transition-all duration-300 flex items-center gap-2 ${
+                    isInitializing 
+                      ? 'bg-[#7c4dff]/10 border border-[#7c4dff]/30 text-[#7c4dff] cursor-wait' 
+                      : 'bg-[#7c4dff] text-black hover:bg-white border border-[#7c4dff] shadow-[0_0_20px_rgba(124,77,255,0.4)] hover:shadow-[0_0_30px_rgba(255,255,255,0.4)]'
+                  }`}
+                >
+                  {isInitializing ? (
+                    <><Loader2 className="w-4 h-4 animate-spin" /> Synchronizing...</>
+                  ) : (
+                    <><Database className="w-4 h-4" /> Initialize Data Source</>
+                  )}
+                </button>
+              ) : (
+                <div className="px-5 py-2.5 rounded-xl border border-[#00e676]/30 bg-[#00e676]/10 text-[#00e676] text-xs font-bold uppercase tracking-widest flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-[#00e676] animate-pulse" /> Nodes Active
+                </div>
+              )}
+            </div>
+            
+            {/* Graph Visualization */}
+            <div className="flex-1 relative w-full h-full min-h-[400px] z-10 flex items-center justify-center">
+               
+               {!isInitialized && !isInitializing && (
+                 <div className="text-center text-zinc-500 font-mono text-sm">
+                   Awaiting initialization...
                  </div>
-                 <h4 className="text-white font-black text-xl mb-2 tracking-wide uppercase">Awaiting Telemetry</h4>
-                 <p className="text-sm text-zinc-400 font-medium leading-relaxed mb-8">
-                   Connect a data source or feed to begin correlating threat entities and mapping relationships in the nexus.
-                 </p>
-                 <button className="px-6 py-3 text-xs font-black uppercase tracking-widest rounded-xl bg-[#7c4dff]/10 text-[#7c4dff] border border-[#7c4dff]/40 hover:bg-[#7c4dff] hover:text-black transition-all duration-300 shadow-[0_0_15px_rgba(124,77,255,0.2)]">
-                   Initialize Data Source
-                 </button>
-               </div>
+               )}
+
+               {isInitializing && (
+                 <motion.div 
+                   initial={{ opacity: 0 }}
+                   animate={{ opacity: 1 }}
+                   className="relative w-32 h-32 flex items-center justify-center"
+                 >
+                    <motion.div 
+                      animate={{ rotate: 360 }} 
+                      transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
+                      className="absolute inset-0 rounded-full border border-dashed border-[#7c4dff]"
+                    />
+                    <motion.div 
+                      animate={{ rotate: -360 }} 
+                      transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
+                      className="absolute inset-4 rounded-full border-t-2 border-r-2 border-[#7c4dff]/50"
+                    />
+                    <Network className="w-8 h-8 text-[#7c4dff]" />
+                 </motion.div>
+               )}
+
+               {isInitialized && (
+                 <svg className="absolute inset-0 w-full h-full pointer-events-none">
+                    {/* Render Edges */}
+                    {edges.map((edge, i) => {
+                      const fromNode = nodes.find(n => n.id === edge.from)
+                      const toNode = nodes.find(n => n.id === edge.to)
+                      if (!fromNode || !toNode) return null
+                      return (
+                        <motion.line 
+                          key={`edge-${edge.from}-${edge.to}`}
+                          initial={{ pathLength: 0, opacity: 0 }}
+                          animate={{ pathLength: 1, opacity: 1 }}
+                          transition={{ duration: 1, delay: 0.5 + (i * 0.2), ease: "easeInOut" }}
+                          x1={fromNode.x} y1={fromNode.y} 
+                          x2={toNode.x} y2={toNode.y} 
+                          stroke="#7c4dff" 
+                          strokeWidth="1.5" 
+                          strokeDasharray="4 4"
+                          className="opacity-40"
+                        />
+                      )
+                    })}
+                 </svg>
+               )}
+
+               {/* Render Nodes */}
+               <AnimatePresence>
+                 {isInitialized && nodes.map((node, i) => (
+                   <motion.div
+                     key={`node-${node.id}`}
+                     initial={{ opacity: 0, scale: 0 }}
+                     animate={{ opacity: 1, scale: 1 }}
+                     transition={{ type: "spring", stiffness: 200, damping: 15, delay: i * 0.15 }}
+                     className="absolute -translate-x-1/2 -translate-y-1/2 flex flex-col items-center group cursor-pointer"
+                     style={{ left: node.x, top: node.y }}
+                   >
+                     {/* Pulse behind node */}
+                     <motion.div 
+                       className="absolute w-full h-full bg-[#7c4dff]/20 rounded-full blur-md"
+                       animate={{ scale: [1, 1.5, 1], opacity: [0.5, 0.2, 0.5] }}
+                       transition={{ duration: 2, repeat: Infinity, delay: i * 0.5 }}
+                     />
+                     
+                     <div className={`relative z-10 flex items-center justify-center rounded-full border-2 border-[#7c4dff] shadow-[0_0_15px_rgba(124,77,255,0.6)] bg-black transition-transform group-hover:scale-125 ${
+                       node.type === 'primary' ? 'w-16 h-16' : node.type === 'secondary' ? 'w-10 h-10' : 'w-6 h-6'
+                     }`}>
+                       {node.type === 'primary' && <Database className="w-6 h-6 text-[#7c4dff]" />}
+                       {node.type === 'secondary' && <LinkIcon className="w-4 h-4 text-[#7c4dff]" />}
+                     </div>
+                     
+                     <div className="mt-3 text-[10px] font-black tracking-widest uppercase text-white bg-black/80 px-2 py-1 rounded border border-[#7c4dff]/30 opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+                       {node.label}
+                     </div>
+                   </motion.div>
+                 ))}
+               </AnimatePresence>
             </div>
           </StitchGlassCard>
         </div>
 
-        {/* Entity Search & Details */}
+        {/* Entity Search & Filtering */}
         <div className="lg:col-span-1 space-y-6">
-          <StitchGlassCard className="h-full flex flex-col border-[#7c4dff]/20">
-            <h3 className="text-lg font-black tracking-widest text-white mb-6 uppercase flex items-center gap-3">
-              <div className="p-2 rounded-xl bg-[#7c4dff]/10 border border-[#7c4dff]/30">
-                <Search className="w-5 h-5 text-[#7c4dff]" />
-              </div>
-              Entity Context
-            </h3>
-            
-            <div className="space-y-8">
-              
-              {/* Search */}
-              <div className="relative group">
-                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500 group-focus-within:text-[#7c4dff] transition-colors" />
-                <input 
-                  type="text" 
-                  placeholder="Scan entities..." 
-                  className="w-full bg-black/60 border border-zinc-800 rounded-xl pl-11 pr-4 py-3 text-sm font-medium text-white placeholder:text-zinc-600 focus:outline-none focus:border-[#7c4dff]/50 focus:shadow-[0_0_20px_rgba(124,77,255,0.15)] transition-all"
-                />
-              </div>
+          <StitchGlassCard className="h-full border-[#7c4dff]/20">
+             <h3 className="text-sm font-black tracking-widest text-zinc-400 uppercase mb-4">Entity Search</h3>
+             
+             <div className="relative mb-6">
+               <input 
+                 type="text" 
+                 value={searchQuery}
+                 onChange={(e) => setSearchQuery(e.target.value)}
+                 placeholder="Search nodes..." 
+                 className="w-full bg-black border border-zinc-800 rounded-xl py-3 pl-10 pr-4 text-sm text-white focus:outline-none focus:border-[#7c4dff]/50 focus:shadow-[0_0_15px_rgba(124,77,255,0.2)] transition-all"
+               />
+               <Search className="w-4 h-4 text-zinc-500 absolute left-4 top-1/2 -translate-y-1/2" />
+             </div>
 
-              {/* Sample Data */}
-              <div className="space-y-4">
-                 <div className="text-[10px] font-black tracking-widest text-zinc-500 uppercase flex items-center gap-2 mb-3">
-                   Selected Node
-                 </div>
-                 
-                 <div className="p-5 rounded-2xl border border-red-500/30 bg-red-500/5 relative overflow-hidden">
-                   <div className="absolute top-0 left-0 w-1 h-full bg-red-500" />
-                   <div className="flex items-center gap-3 mb-3 ml-2">
-                     <Globe className="w-4 h-4 text-red-500" />
-                     <span className="text-red-400 font-bold text-sm font-mono truncate">login-security-update...</span>
-                   </div>
-                   <div className="flex justify-between items-center text-xs font-bold uppercase tracking-widest text-zinc-500 ml-2">
-                     <span>Type: Domain</span>
-                     <span className="text-red-500 bg-red-500/10 px-2 py-1 rounded border border-red-500/20">Risk: High</span>
-                   </div>
-                 </div>
+             <div className="flex items-center gap-2 mb-4 text-xs font-bold uppercase tracking-widest text-zinc-500">
+               <Filter className="w-3 h-3" /> Filtered Results
+             </div>
 
-                 <div className="text-[10px] font-black tracking-widest text-zinc-500 uppercase mt-8 mb-3 flex items-center gap-2">
-                   Correlated Evidence
+             <div className="space-y-2">
+               {isInitialized ? (
+                 filteredEntities.map((entity, i) => (
+                   <motion.div 
+                     key={entity.name}
+                     initial={{ opacity: 0, x: -10 }}
+                     animate={{ opacity: 1, x: 0 }}
+                     transition={{ delay: i * 0.1 }}
+                     className="p-3 rounded-lg border border-zinc-800 bg-zinc-950/50 flex items-center justify-between hover:border-[#7c4dff]/30 transition-colors cursor-pointer group"
+                   >
+                     <span className="text-sm font-bold text-zinc-300 group-hover:text-white transition-colors">{entity.name}</span>
+                     <span className={`w-2 h-2 rounded-full ${entity.status === 'Active' ? 'bg-[#00e676]' : 'bg-zinc-600'}`} />
+                   </motion.div>
+                 ))
+               ) : (
+                 <div className="text-center py-8 text-zinc-600 text-xs font-bold uppercase tracking-widest border border-dashed border-zinc-800 rounded-lg">
+                   Initialize graph first
                  </div>
-
-                 <div className="p-4 rounded-xl border border-zinc-800 bg-zinc-900/50 flex items-center gap-4 hover:border-[#7c4dff]/30 transition-colors cursor-pointer">
-                   <div className="p-2 rounded-lg bg-[#00e5ff]/10 border border-[#00e5ff]/30">
-                     <Database className="w-4 h-4 text-[#00e5ff]" />
-                   </div>
-                   <div>
-                     <div className="text-sm text-white font-bold mb-1">Known Phishing IP</div>
-                     <div className="text-xs font-medium text-zinc-500">Connected 2 days ago</div>
-                   </div>
+               )}
+               
+               {isInitialized && filteredEntities.length === 0 && (
+                 <div className="text-center py-4 text-zinc-600 text-xs font-medium">
+                   No entities found.
                  </div>
-              </div>
+               )}
+             </div>
 
-            </div>
           </StitchGlassCard>
         </div>
 

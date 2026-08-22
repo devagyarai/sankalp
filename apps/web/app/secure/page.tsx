@@ -1,12 +1,35 @@
 "use client"
 
+import { useState } from "react"
 import { StitchDomainShell } from "@/components/stitch/stitch-domain-shell"
 import { StitchDomainHeader } from "@/components/stitch/stitch-domain-header"
 import { StitchGlassCard } from "@/components/stitch/stitch-glass-card"
-import { ShieldCheck, AlertCircle, CheckCircle2, Lock, MonitorSmartphone, Key } from "lucide-react"
-import { motion } from "framer-motion"
+import { ShieldCheck, AlertCircle, CheckCircle2, Lock, MonitorSmartphone, Key, Loader2, Shield } from "lucide-react"
+import { motion, AnimatePresence } from "framer-motion"
 
-export default function StitchSecurePage() {
+export default function SecurePage() {
+  const [score, setScore] = useState(85)
+  
+  // Track state for our two interactive actions
+  const [action1State, setAction1State] = useState<'IDLE' | 'PROCESSING' | 'RESOLVED'>('IDLE')
+  const [action2State, setAction2State] = useState<'IDLE' | 'PROCESSING' | 'RESOLVED'>('IDLE')
+
+  const handleFixAction1 = () => {
+    setAction1State('PROCESSING')
+    setTimeout(() => {
+      setAction1State('RESOLVED')
+      setScore(prev => prev + 9) // 85 -> 94
+    }, 2000)
+  }
+
+  const handleFixAction2 = () => {
+    setAction2State('PROCESSING')
+    setTimeout(() => {
+      setAction2State('RESOLVED')
+      setScore(prev => prev + 6) // Score boost
+    }, 1500)
+  }
+
   return (
     <StitchDomainShell domainId="secure">
       <StitchDomainHeader 
@@ -19,9 +42,9 @@ export default function StitchSecurePage() {
         
         {/* Security Overview */}
         <div className="lg:col-span-1 space-y-6">
-          <StitchGlassCard className="text-center group border-[#f50057]/30 bg-[#f50057]/5 hover:border-[#f50057]/50 hover:shadow-[0_0_30px_rgba(245,0,87,0.2)]">
+          <StitchGlassCard className={`text-center group transition-colors duration-700 ${score > 90 ? 'border-[#00e676]/30 bg-[#00e676]/5 hover:border-[#00e676]/50' : 'border-[#f50057]/30 bg-[#f50057]/5 hover:border-[#f50057]/50'} hover:shadow-[0_0_30px_rgba(245,0,87,0.2)] relative overflow-hidden`}>
              <motion.div 
-               className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 bg-[#f50057]/10 blur-[40px] rounded-full pointer-events-none" 
+               className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 blur-[40px] rounded-full pointer-events-none transition-colors duration-1000 ${score > 90 ? 'bg-[#00e676]/20' : 'bg-[#f50057]/10'}`} 
                animate={{ scale: [1, 1.1, 1], opacity: [0.6, 1, 0.6] }}
                transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
              />
@@ -30,13 +53,28 @@ export default function StitchSecurePage() {
                 <motion.div
                   whileHover={{ scale: 1.1, rotate: 5 }}
                   transition={{ type: "spring", stiffness: 400, damping: 10 }}
-                  className="p-4 rounded-2xl bg-[#f50057]/10 border border-[#f50057]/30 mb-6 shadow-[0_0_20px_rgba(245,0,87,0.3)]"
+                  className={`p-4 rounded-2xl border mb-6 transition-colors duration-700 ${score > 90 ? 'bg-[#00e676]/10 border-[#00e676]/30 shadow-[0_0_20px_rgba(0,230,118,0.3)]' : 'bg-[#f50057]/10 border-[#f50057]/30 shadow-[0_0_20px_rgba(245,0,87,0.3)]'}`}
                 >
-                  <ShieldCheck className="w-10 h-10 text-[#f50057]" />
+                  {score > 90 ? <Shield className="w-10 h-10 text-[#00e676]" /> : <ShieldCheck className="w-10 h-10 text-[#f50057]" />}
                 </motion.div>
                 <h3 className="text-sm font-black tracking-widest uppercase text-zinc-400 mb-2">Safety Posture</h3>
-                <div className="text-6xl font-black text-[#f50057] mb-2 drop-shadow-[0_0_15px_rgba(245,0,87,0.5)]">85<span className="text-2xl text-[#f50057]/50">/100</span></div>
-                <p className="text-[#f50057] font-bold tracking-widest uppercase text-xs px-3 py-1 rounded-full bg-[#f50057]/10 border border-[#f50057]/30 mt-2">Strong Protection</p>
+                
+                {/* Animated Score */}
+                <div className={`text-6xl font-black mb-2 transition-colors duration-700 ${score > 90 ? 'text-[#00e676] drop-shadow-[0_0_15px_rgba(0,230,118,0.5)]' : 'text-[#f50057] drop-shadow-[0_0_15px_rgba(245,0,87,0.5)]'}`}>
+                  <motion.span
+                    key={score}
+                    initial={{ opacity: 0, y: -20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ type: "spring", stiffness: 300, damping: 15 }}
+                  >
+                    {score}
+                  </motion.span>
+                  <span className={`text-2xl transition-colors duration-700 ${score > 90 ? 'text-[#00e676]/50' : 'text-[#f50057]/50'}`}>/100</span>
+                </div>
+                
+                <p className={`font-bold tracking-widest uppercase text-xs px-3 py-1 rounded-full border mt-2 transition-colors duration-700 ${score > 90 ? 'text-[#00e676] bg-[#00e676]/10 border-[#00e676]/30' : 'text-[#f50057] bg-[#f50057]/10 border-[#f50057]/30'}`}>
+                  {score > 90 ? 'Maximum Protection' : 'Strong Protection'}
+                </p>
              </div>
           </StitchGlassCard>
           
@@ -51,12 +89,16 @@ export default function StitchSecurePage() {
                 <CheckCircle2 className="w-4 h-4 text-[#00e676]" />
              </div>
 
-             <div className="flex items-center justify-between p-3 rounded-xl bg-[#ffc400]/5 border border-[#ffc400]/20 hover:border-[#ffc400]/40 transition-colors">
+             <div className={`flex items-center justify-between p-3 rounded-xl border transition-colors duration-500 ${action2State === 'RESOLVED' ? 'bg-zinc-900/50 border-zinc-800 hover:border-[#00e676]/30' : 'bg-[#ffc400]/5 border-[#ffc400]/20 hover:border-[#ffc400]/40'}`}>
                 <div className="flex items-center gap-3">
-                  <Lock className="w-4 h-4 text-[#ffc400]" />
+                  <Lock className={`w-4 h-4 transition-colors ${action2State === 'RESOLVED' ? 'text-[#00e676]' : 'text-[#ffc400]'}`} />
                   <span className="text-sm text-zinc-300 font-bold tracking-wide">Password Hygiene</span>
                 </div>
-                <span className="text-[10px] font-black tracking-widest text-[#ffc400] bg-[#ffc400]/10 px-2 py-1 rounded uppercase border border-[#ffc400]/30">Review</span>
+                {action2State === 'RESOLVED' ? (
+                  <CheckCircle2 className="w-4 h-4 text-[#00e676]" />
+                ) : (
+                  <span className="text-[10px] font-black tracking-widest text-[#ffc400] bg-[#ffc400]/10 px-2 py-1 rounded uppercase border border-[#ffc400]/30">Review</span>
+                )}
              </div>
 
              <div className="flex items-center justify-between p-3 rounded-xl bg-zinc-900/50 border border-zinc-800 hover:border-[#00e676]/30 transition-colors">
@@ -72,53 +114,108 @@ export default function StitchSecurePage() {
         {/* Recommendations */}
         <div className="lg:col-span-2">
           <StitchGlassCard className="h-full border-[#f50057]/20">
-            <h3 className="text-lg font-black tracking-widest text-white mb-6 uppercase flex items-center gap-3">
-              <div className="p-2 rounded-xl bg-[#f50057]/10 border border-[#f50057]/30">
-                <ShieldCheck className="w-5 h-5 text-[#f50057]" />
-              </div>
-              Prioritized Actions
-            </h3>
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="text-lg font-black tracking-widest text-white uppercase flex items-center gap-3">
+                <div className="p-2 rounded-xl bg-[#f50057]/10 border border-[#f50057]/30">
+                  <ShieldCheck className="w-5 h-5 text-[#f50057]" />
+                </div>
+                Prioritized Actions
+              </h3>
+              {score > 90 && (
+                <span className="text-xs font-bold text-[#00e676] bg-[#00e676]/10 px-3 py-1 rounded-full border border-[#00e676]/30">All systems secure</span>
+              )}
+            </div>
             
             <div className="space-y-8">
               
-              {/* High Priority */}
+              {/* High Priority Action 1 */}
               <div className="space-y-4">
-                <div className="text-[10px] font-black tracking-widest text-[#ffc400] uppercase flex items-center gap-2">
-                  <AlertCircle className="w-4 h-4" />
-                  High Priority
+                <div className={`text-[10px] font-black tracking-widest uppercase flex items-center gap-2 transition-colors ${action1State === 'RESOLVED' ? 'text-[#00e676]' : 'text-[#ffc400]'}`}>
+                  {action1State === 'RESOLVED' ? <CheckCircle2 className="w-4 h-4" /> : <AlertCircle className="w-4 h-4" />}
+                  {action1State === 'RESOLVED' ? 'Resolved' : 'High Priority'}
                 </div>
                 
-                <div className="p-5 rounded-2xl border border-zinc-800 bg-zinc-950 hover:bg-black hover:border-[#ffc400]/30 transition-all duration-300 cursor-pointer group">
+                <motion.div 
+                  layout
+                  className={`p-5 rounded-2xl border transition-all duration-300 relative overflow-hidden ${
+                    action1State === 'RESOLVED'
+                      ? 'border-[#00e676]/30 bg-zinc-950/50 opacity-50'
+                      : 'border-zinc-800 bg-zinc-950 hover:bg-black hover:border-[#ffc400]/30 cursor-pointer group'
+                  }`}
+                >
                   <div className="flex justify-between items-start mb-3">
-                    <h4 className="text-white font-bold text-lg">Enable 2FA on Primary Email</h4>
-                    <button className="px-4 py-2 rounded-xl border border-zinc-700 bg-zinc-900 text-xs font-bold uppercase tracking-widest text-white group-hover:bg-[#ffc400] group-hover:text-black group-hover:border-[#ffc400] transition-colors">
-                      Fix Now
-                    </button>
+                    <h4 className={`font-bold text-lg transition-colors ${action1State === 'RESOLVED' ? 'text-zinc-500' : 'text-white'}`}>
+                      Enable 2FA on Primary Email
+                    </h4>
+                    
+                    {action1State === 'IDLE' && (
+                      <button 
+                        onClick={handleFixAction1}
+                        className="px-4 py-2 rounded-xl border border-zinc-700 bg-zinc-900 text-xs font-bold uppercase tracking-widest text-white group-hover:bg-[#ffc400] group-hover:text-black group-hover:border-[#ffc400] transition-colors"
+                      >
+                        Fix Now
+                      </button>
+                    )}
+                    {action1State === 'PROCESSING' && (
+                      <button disabled className="px-4 py-2 rounded-xl border border-[#ffc400]/30 bg-[#ffc400]/10 text-xs font-bold uppercase tracking-widest text-[#ffc400] flex items-center gap-2">
+                        <Loader2 className="w-3 h-3 animate-spin" /> Securing...
+                      </button>
+                    )}
+                    {action1State === 'RESOLVED' && (
+                      <div className="px-4 py-2 rounded-xl bg-[#00e676]/10 text-[#00e676] text-xs font-bold uppercase tracking-widest border border-[#00e676]/30">
+                        Secured
+                      </div>
+                    )}
                   </div>
                   <p className="text-sm text-zinc-500 font-medium leading-relaxed">
                     Your primary email is used for password recovery across 12 connected services in the Cypherverse. Securing it prevents a single point of failure.
                   </p>
-                </div>
+                </motion.div>
               </div>
 
-              {/* Recommended */}
+              {/* Recommended Action 2 */}
               <div className="space-y-4">
-                <div className="text-[10px] font-black tracking-widest text-[#00e676] uppercase flex items-center gap-2">
+                <div className={`text-[10px] font-black tracking-widest uppercase flex items-center gap-2 transition-colors ${action2State === 'RESOLVED' ? 'text-[#00e676]' : 'text-zinc-400'}`}>
                   <CheckCircle2 className="w-4 h-4" />
-                  Recommended
+                  {action2State === 'RESOLVED' ? 'Resolved' : 'Recommended'}
                 </div>
                 
-                <div className="p-5 rounded-2xl border border-zinc-800 bg-zinc-950 hover:bg-black hover:border-[#00e676]/30 transition-all duration-300 cursor-pointer group">
+                <motion.div 
+                  layout
+                  className={`p-5 rounded-2xl border transition-all duration-300 relative overflow-hidden ${
+                    action2State === 'RESOLVED'
+                      ? 'border-[#00e676]/30 bg-zinc-950/50 opacity-50'
+                      : 'border-zinc-800 bg-zinc-950 hover:bg-black hover:border-zinc-600 cursor-pointer group'
+                  }`}
+                >
                   <div className="flex justify-between items-start mb-3">
-                    <h4 className="text-white font-bold text-lg">Review App Permissions</h4>
-                    <button className="px-4 py-2 rounded-xl border border-zinc-700 bg-zinc-900 text-xs font-bold uppercase tracking-widest text-white group-hover:bg-[#00e676] group-hover:text-black group-hover:border-[#00e676] transition-colors">
-                      Review
-                    </button>
+                    <h4 className={`font-bold text-lg transition-colors ${action2State === 'RESOLVED' ? 'text-zinc-500' : 'text-white'}`}>
+                      Review App Permissions
+                    </h4>
+                    
+                    {action2State === 'IDLE' && (
+                      <button 
+                        onClick={handleFixAction2}
+                        className="px-4 py-2 rounded-xl border border-zinc-700 bg-zinc-900 text-xs font-bold uppercase tracking-widest text-white group-hover:bg-white group-hover:text-black group-hover:border-white transition-colors"
+                      >
+                        Review
+                      </button>
+                    )}
+                    {action2State === 'PROCESSING' && (
+                      <button disabled className="px-4 py-2 rounded-xl border border-zinc-500 bg-zinc-800 text-xs font-bold uppercase tracking-widest text-zinc-300 flex items-center gap-2">
+                        <Loader2 className="w-3 h-3 animate-spin" /> Auditing...
+                      </button>
+                    )}
+                    {action2State === 'RESOLVED' && (
+                      <div className="px-4 py-2 rounded-xl bg-[#00e676]/10 text-[#00e676] text-xs font-bold uppercase tracking-widest border border-[#00e676]/30">
+                        Audited
+                      </div>
+                    )}
                   </div>
                   <p className="text-sm text-zinc-500 font-medium leading-relaxed">
-                      If SANKALP detects any unusual patterns—like logins from a new quadrant or suspicious API access requests—the SECURE domain locks down the environment instantly. You&apos;ll be alerted immediately.
+                      If SANKALP detects any unusual patterns—like logins from a new quadrant or suspicious API access requests—the SECURE domain locks down the environment instantly.
                   </p>
-                </div>
+                </motion.div>
               </div>
 
             </div>
