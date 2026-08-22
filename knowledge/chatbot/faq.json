@@ -1,0 +1,19 @@
+{
+  "faqs": [
+    {
+      "question": "What is Sankalp?",
+      "answer": "Sankalp is a modular, multi-purpose intelligent platform designed for planning, productivity, and cross-domain intelligence.",
+      "category": "general"
+    },
+    {
+      "question": "How do I navigate the Sankalp dashboard?",
+      "answer": "Use the left sidebar to switch between different modules like Focus, Trajectory, and Pulse.",
+      "category": "navigation"
+    },
+    {
+      "question": "Is my data secure in Sankalp?",
+      "answer": "Yes, Sankalp follows strict security baselines, ensuring data isolation and secure sessions.",
+      "category": "security"
+    }
+  ]
+}

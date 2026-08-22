@@ -1,0 +1,23 @@
+import { apiClient } from '../api/client';
+import { StandardResponse } from '../api/types';
+import { UserResponse } from './auth-types';
+
+class AuthClient {
+    async register(data: any): Promise<StandardResponse<UserResponse>> {
+        return apiClient.post<StandardResponse<UserResponse>>('/auth/register', data);
+    }
+
+    async login(data: any): Promise<StandardResponse<UserResponse>> {
+        return apiClient.post<StandardResponse<UserResponse>>('/auth/login', data);
+    }
+
+    async logout(): Promise<StandardResponse<void>> {
+        return apiClient.post<StandardResponse<void>>('/auth/logout', {});
+    }
+
+    async getMe(): Promise<StandardResponse<UserResponse>> {
+        return apiClient.get<StandardResponse<UserResponse>>('/auth/me');
+    }
+}
+
+export const authClient = new AuthClient();
