@@ -5,12 +5,77 @@ import { StitchDomainShell } from "@/components/stitch/stitch-domain-shell"
 import { StitchDomainHeader } from "@/components/stitch/stitch-domain-header"
 import { StitchGlassCard } from "@/components/stitch/stitch-glass-card"
 import { motion, AnimatePresence } from "framer-motion"
-import { Target, TrendingUp, Loader2, Sparkles } from "lucide-react"
+import { Target, TrendingUp, Sparkles, AlertOctagon, Users } from "lucide-react"
+import { useAuth } from "@/lib/auth-context"
+
+import { useEffect } from "react"
+import { fetchApi } from "@/lib/api-client"
 
 type MappingState = 'IDLE' | 'SCANNING' | 'COMPLETE'
 
+type SkillLevel = {
+  name: string;
+  initial: number;
+  final: number;
+  level: string;
+}
 export default function ShapePage() {
+  const { currentUser, users } = useAuth()
   const [mappingState, setMappingState] = useState<MappingState>('IDLE')
+  const [newSkillName, setNewSkillName] = useState('')
+  const [skills, setSkills] = useState<SkillLevel[]>([])
+  const [isLoading, setIsLoading] = useState(true)
+
+  useEffect(() => {
+    if (currentUser.role === 'STUDENT') {
+      fetchApi<any>('/career/profile')
+        .then(data => {
+          setSkills(data.current_skills.map((s: any) => ({
+            name: s.name,
+            initial: s.proficiency,
+            final: Math.min(100, s.proficiency + 15),
+            level: s.proficiency > 75 ? 'Advanced' : s.proficiency > 40 ? 'Intermediate' : 'Novice'
+          })))
+          setIsLoading(false)
+        })
+        .catch(err => console.error("Failed to fetch profile:", err))
+    }
+  }, [currentUser])
+
+  const handleAddSkill = async () => {
+    if (!newSkillName.trim()) return;
+    
+    // Optimistic UI update
+    const tempSkill = { 
+      name: newSkillName.trim(), 
+      initial: 10, 
+      final: 25, 
+      level: 'Novice' 
+    };
+    setSkills(prev => [...prev, tempSkill]);
+    setNewSkillName('');
+    setMappingState('IDLE');
+    
+    try {
+      // Actually save it to the backend
+      const data = await fetchApi<any>('/career/profile/skills', {
+        method: 'POST',
+        body: JSON.stringify({ name: tempSkill.name })
+      });
+      
+      // Update with truth from server
+      setSkills(data.current_skills.map((s: any) => ({
+        name: s.name,
+        initial: s.proficiency,
+        final: Math.min(100, s.proficiency + 15),
+        level: s.proficiency > 75 ? 'Advanced' : s.proficiency > 40 ? 'Intermediate' : 'Novice'
+      })));
+    } catch (err) {
+      console.error("Failed to add skill:", err);
+      // Remove optimistic skill on failure
+      setSkills(prev => prev.filter(s => s.name !== tempSkill.name));
+    }
+  }
 
   const handleMapSkills = () => {
     if (mappingState !== 'IDLE') return
@@ -22,18 +87,104 @@ export default function ShapePage() {
     }, 3000)
   }
 
-  const skills = [
-    { name: 'Frontend Engineering', initial: 80, final: 85, level: 'Advanced' },
-    { name: 'UI/UX Design', initial: 60, final: 72, level: 'Intermediate' },
-    { name: 'Backend Architecture', initial: 30, final: 45, level: 'Developing' },
-  ]
-
   const roadmap = [
     { time: "NOW", title: "Consolidate React & Next.js", desc: "Build 2 more complex vertical slices.", delay: 0.2 },
     { time: "NEXT", title: "System Design Principles", desc: "Understand large scale frontend architecture.", delay: 0.3 },
     { time: "LATER", title: "Full-Stack Transition", desc: "Deepen understanding of FastAPI and Postgres.", delay: 0.4 },
   ]
 
+  // COMMANDER VIEW
+  if (currentUser.role === 'COMMANDER') {
+    const students = users.filter(u => u.role === 'STUDENT')
+    
+    return (
+      <StitchDomainShell domainId="shape">
+        <StitchDomainHeader 
+          domainId="shape"
+          title="Fleet Skill Matrix"
+          description="Analyze capabilities and critical skill gaps across all assigned cadets."
+        />
+        
+        <div className="flex-1 grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="md:col-span-2 space-y-6">
+            <StitchGlassCard className="border-[#ff3d00]/30 h-full">
+              <h3 className="text-lg font-black text-white mb-6 flex items-center gap-3 uppercase tracking-widest">
+                 <div className="p-2 rounded-xl bg-[#ff3d00]/10 border border-[#ff3d00]/30">
+                   <Target className="w-5 h-5 text-[#ff3d00]" />
+                 </div>
+                 Fleet Skill Distribution
+              </h3>
+
+              <div className="space-y-6">
+                {[
+                  { name: "React / Next.js", avg: 85, trend: "+12%" },
+                  { name: "TypeScript", avg: 72, trend: "+5%" },
+                  { name: "PostgreSQL", avg: 45, trend: "-2%" },
+                  { name: "System Design", avg: 28, trend: "Stable" },
+                ].map((skill, idx) => (
+                  <div key={skill.name} className="space-y-3 group cursor-default">
+                    <div className="flex justify-between text-xs font-bold uppercase tracking-wider">
+                      <span className="text-zinc-400 group-hover:text-white transition-colors">{skill.name}</span>
+                      <span className="text-[#ff3d00]/70 group-hover:text-[#ff3d00] transition-colors">{skill.avg}% Avg</span>
+                    </div>
+                    <div className="h-3 w-full bg-zinc-900 rounded-full overflow-hidden border border-zinc-800 relative">
+                       <motion.div 
+                         initial={{ width: 0 }}
+                         animate={{ width: `${skill.avg}%` }}
+                         transition={{ duration: 1.5, delay: idx * 0.1, ease: "easeOut" }}
+                         className="absolute top-0 left-0 h-full bg-[#ff3d00]" 
+                       />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </StitchGlassCard>
+          </div>
+
+          <div className="md:col-span-1 space-y-6">
+            <StitchGlassCard className="border-red-500/30 bg-red-500/5">
+              <h3 className="text-sm font-black text-white mb-4 flex items-center gap-2 uppercase tracking-widest">
+                 <AlertOctagon className="w-4 h-4 text-red-500" />
+                 Critical Gaps
+              </h3>
+              <div className="space-y-4">
+                 <div className="p-3 bg-black border border-red-500/20 rounded-lg">
+                    <h4 className="text-red-400 font-bold text-sm">System Design</h4>
+                    <p className="text-xs text-zinc-500 font-medium mt-1">70% of cadets fall below the minimum threshold required for upcoming milestones.</p>
+                 </div>
+                 <div className="p-3 bg-black border border-[#ffc400]/20 rounded-lg">
+                    <h4 className="text-[#ffc400] font-bold text-sm">PostgreSQL</h4>
+                    <p className="text-xs text-zinc-500 font-medium mt-1">45% of cadets are struggling with complex joins.</p>
+                 </div>
+              </div>
+            </StitchGlassCard>
+
+            <StitchGlassCard className="border-zinc-800">
+              <h3 className="text-sm font-black text-white mb-4 flex items-center gap-2 uppercase tracking-widest">
+                 <TrendingUp className="w-4 h-4 text-zinc-400" />
+                 Trajectory Health
+              </h3>
+              <div className="flex items-center justify-between p-4 border border-zinc-800 bg-zinc-900/50 rounded-xl">
+                 <div className="flex items-center gap-3">
+                   <Users className="w-8 h-8 text-zinc-500" />
+                   <div>
+                     <div className="text-white font-bold text-lg">{students.length}</div>
+                     <div className="text-[10px] text-zinc-500 uppercase tracking-widest">Tracked Cadets</div>
+                   </div>
+                 </div>
+                 <div className="text-right">
+                   <div className="text-[#00e676] font-black text-lg">92%</div>
+                   <div className="text-[10px] text-zinc-500 uppercase tracking-widest">On Course</div>
+                 </div>
+              </div>
+            </StitchGlassCard>
+          </div>
+        </div>
+      </StitchDomainShell>
+    )
+  }
+
+  // STUDENT VIEW
   return (
     <StitchDomainShell domainId="shape">
       <StitchDomainHeader 
@@ -46,15 +197,15 @@ export default function ShapePage() {
         
         {/* Profile Snapshot */}
         <div className="md:col-span-1 space-y-6">
-          <StitchGlassCard className={`h-full transition-colors duration-500 ${mappingState === 'SCANNING' ? 'border-[#ff3d00] shadow-[0_0_30px_rgba(255,61,0,0.4)]' : 'border-[#ff3d00]/30 hover:border-[#ff3d00]/50 hover:shadow-[0_0_30px_rgba(255,61,0,0.2)]'}`}>
-            <h3 className="text-lg font-black text-white mb-6 flex items-center gap-3 uppercase tracking-widest">
+          <StitchGlassCard className={`h-full transition-colors duration-500 flex flex-col ${mappingState === 'SCANNING' ? 'border-[#ff3d00] shadow-[0_0_30px_rgba(255,61,0,0.4)]' : 'border-[#ff3d00]/30 hover:border-[#ff3d00]/50 hover:shadow-[0_0_30px_rgba(255,61,0,0.2)]'}`}>
+            <h3 className="text-lg font-black text-white mb-6 flex items-center gap-3 uppercase tracking-widest shrink-0">
                <div className="p-2 rounded-xl bg-[#ff3d00]/10 border border-[#ff3d00]/30">
                  <Target className="w-5 h-5 text-[#ff3d00]" />
                </div>
                Current Capabilities
             </h3>
             
-            <div className="space-y-6 relative">
+            <div className="space-y-6 relative flex-1 flex flex-col">
                {/* Scanning Overlay */}
                <AnimatePresence>
                  {mappingState === 'SCANNING' && (
@@ -76,35 +227,56 @@ export default function ShapePage() {
                  )}
                </AnimatePresence>
 
+               {/* Add Skill Input */}
+               <div className="flex items-center gap-2 mb-2 shrink-0">
+                 <input 
+                   type="text" 
+                   value={newSkillName}
+                   onChange={(e) => setNewSkillName(e.target.value)}
+                   onKeyDown={(e) => e.key === 'Enter' && handleAddSkill()}
+                   placeholder="Add a new skill..." 
+                   className="flex-1 bg-black border border-zinc-800 rounded-xl py-2 px-3 text-xs text-white focus:outline-none focus:border-[#ff3d00]/50 transition-colors"
+                 />
+                 <button 
+                   onClick={handleAddSkill}
+                   disabled={!newSkillName.trim()}
+                   className="px-3 py-2 bg-[#ff3d00]/10 hover:bg-[#ff3d00]/20 text-[#ff3d00] border border-[#ff3d00]/30 rounded-xl text-xs font-bold uppercase disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                 >
+                   Add
+                 </button>
+               </div>
+
                {/* Skills */}
-               {skills.map((skill, idx) => (
-                 <div key={skill.name} className="space-y-3 group cursor-default">
-                   <div className="flex justify-between text-xs font-bold uppercase tracking-wider transition-transform duration-300 group-hover:translate-x-1">
-                     <span className="text-zinc-400 group-hover:text-white transition-colors">{skill.name}</span>
-                     <span className="text-[#ff3d00]/70 group-hover:text-[#ff3d00] transition-colors">{skill.level}</span>
-                   </div>
-                   <div className="h-2 w-full bg-zinc-900 rounded-full overflow-hidden border border-zinc-800 relative">
-                      <motion.div 
-                        initial={{ width: 0 }}
-                        animate={{ width: mappingState === 'COMPLETE' ? `${skill.final}%` : `${skill.initial}%` }}
-                        transition={{ duration: 1.5, delay: idx * 0.1, ease: "easeOut" }}
-                        className="absolute top-0 left-0 h-full bg-[#ff3d00] shadow-[0_0_15px_rgba(255,61,0,0.8)]" 
-                      />
-                      {/* Highlight new progress */}
-                      {mappingState === 'COMPLETE' && (
+               <div className="space-y-4 max-h-[300px] overflow-y-auto pr-2 custom-scrollbar flex-1 relative z-0">
+                 {skills.map((skill, idx) => (
+                   <div key={skill.name} className="space-y-3 group cursor-default">
+                     <div className="flex justify-between text-xs font-bold uppercase tracking-wider transition-transform duration-300 group-hover:translate-x-1">
+                       <span className="text-zinc-400 group-hover:text-white transition-colors">{skill.name}</span>
+                       <span className="text-[#ff3d00]/70 group-hover:text-[#ff3d00] transition-colors">{skill.level}</span>
+                     </div>
+                     <div className="h-2 w-full bg-zinc-900 rounded-full overflow-hidden border border-zinc-800 relative">
                         <motion.div 
-                          initial={{ width: 0, left: `${skill.initial}%` }}
-                          animate={{ width: `${skill.final - skill.initial}%` }}
-                          transition={{ duration: 1.5, delay: 0.5, ease: "easeOut" }}
-                          className="absolute top-0 h-full bg-[#ffc400] opacity-80" 
+                          initial={{ width: 0 }}
+                          animate={{ width: mappingState === 'COMPLETE' ? `${skill.final}%` : `${skill.initial}%` }}
+                          transition={{ duration: 1.5, delay: idx * 0.1, ease: "easeOut" }}
+                          className="absolute top-0 left-0 h-full bg-[#ff3d00] shadow-[0_0_15px_rgba(255,61,0,0.8)]" 
                         />
-                      )}
+                        {/* Highlight new progress */}
+                        {mappingState === 'COMPLETE' && (
+                          <motion.div 
+                            initial={{ width: 0, left: `${skill.initial}%` }}
+                            animate={{ width: `${skill.final - skill.initial}%` }}
+                            transition={{ duration: 1.5, delay: 0.5, ease: "easeOut" }}
+                            className="absolute top-0 h-full bg-[#ffc400] opacity-80" 
+                          />
+                        )}
+                     </div>
                    </div>
-                 </div>
-               ))}
+                 ))}
+               </div>
             </div>
 
-            <div className="mt-8 pt-6 border-t border-zinc-800 text-center relative overflow-hidden rounded-xl">
+            <div className="mt-8 pt-6 border-t border-zinc-800 text-center relative overflow-hidden rounded-xl shrink-0">
                <button 
                  onClick={handleMapSkills}
                  disabled={mappingState !== 'IDLE'}

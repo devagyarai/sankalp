@@ -102,3 +102,24 @@ def get_career_profile(db: Session, user: User) -> SkillProfile:
         target_role=target_role_schema,
         gaps=gaps_schema
     )
+
+def add_skill_to_profile(db: Session, user: User, skill_name: str) -> SkillProfile:
+    import random
+    
+    # 1. Find or create the skill globally
+    skill = db.scalar(select(Skill).where(Skill.name == skill_name))
+    if not skill:
+        skill = Skill(name=skill_name, category="Custom")
+        db.add(skill)
+        db.flush()
+        
+    # 2. Add to user profile
+    user_skill = db.scalar(select(UserSkill).where(UserSkill.user_id == user.id, UserSkill.skill_id == skill.id))
+    if not user_skill:
+        # Assign a random initial proficiency
+        initial_proficiency = random.randint(10, 40)
+        user_skill = UserSkill(user_id=user.id, skill_id=skill.id, proficiency_level=initial_proficiency)
+        db.add(user_skill)
+        db.commit()
+        
+    return get_career_profile(db, user)

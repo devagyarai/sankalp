@@ -1,6 +1,9 @@
 from pydantic import BaseModel
 
 
+class AddSkillRequest(BaseModel):
+    name: str
+
 class Skill(BaseModel):
     name: str
     proficiency: int # 0-100

@@ -25,6 +25,10 @@ dev = [
     "ruff>=0.0.280",
 ]
 
+[tool.setuptools.packages.find]
+include = ["app*"]
+exclude = ["alembic*", "tests*"]
+
 [tool.ruff]
 line-length = 120
 

@@ -4,12 +4,16 @@ import { useState } from "react"
 import { StitchDomainShell } from "@/components/stitch/stitch-domain-shell"
 import { StitchDomainHeader } from "@/components/stitch/stitch-domain-header"
 import { StitchGlassCard } from "@/components/stitch/stitch-glass-card"
-import { AlertOctagon, Link as LinkIcon, MessageSquareWarning, Radar, Loader2, CheckCircle2 } from "lucide-react"
+import { AlertOctagon, Link as LinkIcon, MessageSquareWarning, Radar, Loader2, CheckCircle2, ShieldAlert, Activity } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
+import { useAuth } from "@/lib/auth-context"
 
 type AnalysisState = 'IDLE' | 'ANALYZING' | 'RESULT'
 
 export default function StitchWatchPage() {
+  const { currentUser, users } = useAuth()
+  
+  // Student State
   const [analysisState, setAnalysisState] = useState<AnalysisState>('IDLE')
   const [inputValue, setInputValue] = useState("http://login-security-update-alert-9128.com/verify-account")
   const [riskLevel, setRiskLevel] = useState<'HIGH' | 'LOW' | null>(null)
@@ -26,6 +30,101 @@ export default function StitchWatchPage() {
     }, 3000)
   }
 
+  // COMMANDER VIEW
+  if (currentUser.role === 'COMMANDER') {
+    return (
+      <StitchDomainShell domainId="watch">
+        <StitchDomainHeader 
+          domainId="watch"
+          title="Fleet Threat Logs"
+          description="Monitor real-time threat intelligence and malicious activity intercepted across the cadet fleet."
+        />
+        
+        <div className="flex-1 grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div className="lg:col-span-2 space-y-6">
+            <StitchGlassCard className="h-full border-[#ffc400]/30 hover:border-[#ffc400]/50 relative overflow-hidden">
+              <div className="absolute top-0 right-0 p-4">
+                 <Radar className="w-24 h-24 text-[#ffc400]/10 animate-spin" style={{ animationDuration: '8s' }} />
+              </div>
+              
+              <h3 className="text-lg font-black tracking-widest text-white mb-6 uppercase flex items-center gap-3 relative z-10">
+                <div className="p-2 rounded-xl bg-[#ffc400]/10 border border-[#ffc400]/30">
+                  <ShieldAlert className="w-5 h-5 text-[#ffc400]" />
+                </div>
+                Intercepted Threats (Last 24H)
+              </h3>
+              
+              <div className="space-y-4 relative z-10">
+                 {[
+                   { user: "Student Beta", type: "Phishing Link", target: "Github Credentials", risk: "CRITICAL", time: "12m ago" },
+                   { user: "Student Gamma", type: "Malware Download", target: "Local Environment", risk: "HIGH", time: "2h ago" },
+                   { user: "Student Alpha", type: "Suspicious API Activity", target: "Auth Tokens", risk: "MEDIUM", time: "5h ago" },
+                 ].map((threat, idx) => (
+                   <motion.div 
+                     initial={{ opacity: 0, x: -20 }}
+                     animate={{ opacity: 1, x: 0 }}
+                     transition={{ delay: idx * 0.1 }}
+                     key={idx} 
+                     className="p-4 rounded-xl border border-zinc-800 bg-zinc-950/80 hover:bg-black hover:border-[#ffc400]/40 transition-colors flex flex-col md:flex-row md:items-center justify-between gap-4"
+                   >
+                     <div className="flex items-center gap-4">
+                        <div className={`p-2 rounded-lg border ${threat.risk === 'CRITICAL' ? 'bg-red-500/10 border-red-500/30 text-red-500' : threat.risk === 'HIGH' ? 'bg-[#ffc400]/10 border-[#ffc400]/30 text-[#ffc400]' : 'bg-[#00e5ff]/10 border-[#00e5ff]/30 text-[#00e5ff]'}`}>
+                           <AlertOctagon className="w-5 h-5" />
+                        </div>
+                        <div>
+                           <div className="flex items-center gap-2 mb-1">
+                             <span className="font-bold text-white text-sm">{threat.type}</span>
+                             <span className="text-[10px] font-black uppercase tracking-widest text-zinc-500">Target: {threat.target}</span>
+                           </div>
+                           <div className="text-xs text-zinc-400 font-medium">
+                             Originating from: <span className="text-zinc-300">{threat.user}</span>
+                           </div>
+                        </div>
+                     </div>
+                     <div className="flex items-center gap-4 text-right">
+                        <div className={`text-[10px] font-black uppercase tracking-widest px-2 py-1 rounded border ${threat.risk === 'CRITICAL' ? 'bg-red-500/10 border-red-500/30 text-red-500' : threat.risk === 'HIGH' ? 'bg-[#ffc400]/10 border-[#ffc400]/30 text-[#ffc400]' : 'bg-[#00e5ff]/10 border-[#00e5ff]/30 text-[#00e5ff]'}`}>
+                           {threat.risk} RISK
+                        </div>
+                        <div className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest w-16">
+                           {threat.time}
+                        </div>
+                     </div>
+                   </motion.div>
+                 ))}
+              </div>
+            </StitchGlassCard>
+          </div>
+
+          <div className="lg:col-span-1 space-y-6">
+            <StitchGlassCard className="border-red-500/30 bg-red-500/5 text-center">
+               <h3 className="text-sm font-black tracking-widest uppercase text-red-400 mb-2">Threat Level</h3>
+               <div className="text-5xl font-black text-red-500 drop-shadow-[0_0_15px_rgba(239,68,68,0.5)] mb-2">ELEVATED</div>
+               <p className="text-xs font-bold text-red-400/80 uppercase tracking-widest">3 active incidents</p>
+            </StitchGlassCard>
+            
+            <StitchGlassCard className="border-zinc-800">
+               <h3 className="text-sm font-black tracking-widest uppercase text-white mb-4 flex items-center gap-2">
+                  <Activity className="w-4 h-4 text-[#ffc400]" /> Network Activity
+               </h3>
+               
+               <div className="space-y-4">
+                 <div className="flex justify-between items-center text-sm border-b border-zinc-800 pb-3">
+                   <span className="text-zinc-400 font-bold uppercase tracking-wider text-xs">Total Scanned (24h)</span>
+                   <span className="font-mono font-black text-white">12,458</span>
+                 </div>
+                 <div className="flex justify-between items-center text-sm border-b border-zinc-800 pb-3 pt-1">
+                   <span className="text-zinc-400 font-bold uppercase tracking-wider text-xs">Threats Blocked</span>
+                   <span className="font-mono font-black text-[#00e676]">98.2%</span>
+                 </div>
+               </div>
+            </StitchGlassCard>
+          </div>
+        </div>
+      </StitchDomainShell>
+    )
+  }
+
+  // STUDENT VIEW
   return (
     <StitchDomainShell domainId="watch">
       <StitchDomainHeader 

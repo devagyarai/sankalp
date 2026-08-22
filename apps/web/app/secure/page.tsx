@@ -4,22 +4,28 @@ import { useState } from "react"
 import { StitchDomainShell } from "@/components/stitch/stitch-domain-shell"
 import { StitchDomainHeader } from "@/components/stitch/stitch-domain-header"
 import { StitchGlassCard } from "@/components/stitch/stitch-glass-card"
-import { ShieldCheck, AlertCircle, CheckCircle2, Lock, MonitorSmartphone, Key, Loader2, Shield } from "lucide-react"
+import { ShieldCheck, AlertCircle, CheckCircle2, Lock, MonitorSmartphone, Key, Loader2, Shield, Users, Activity } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
+import { useAuth } from "@/lib/auth-context"
+import { fetchApi } from "@/lib/api-client"
 
 export default function SecurePage() {
-  const [score, setScore] = useState(85)
+  const { currentUser, users } = useAuth()
   
-  // Track state for our two interactive actions
+  // Student State
+  const [score, setScore] = useState(85)
   const [action1State, setAction1State] = useState<'IDLE' | 'PROCESSING' | 'RESOLVED'>('IDLE')
   const [action2State, setAction2State] = useState<'IDLE' | 'PROCESSING' | 'RESOLVED'>('IDLE')
 
-  const handleFixAction1 = () => {
+  const handleFixAction1 = async () => {
     setAction1State('PROCESSING')
-    setTimeout(() => {
-      setAction1State('RESOLVED')
-      setScore(prev => prev + 9) // 85 -> 94
-    }, 2000)
+    try {
+      await fetchApi('/intelligence/shield')
+    } catch (err) {
+      console.error(err)
+    }
+    setAction1State('RESOLVED')
+    setScore(prev => prev + 9) // 85 -> 94
   }
 
   const handleFixAction2 = () => {
@@ -30,6 +36,117 @@ export default function SecurePage() {
     }, 1500)
   }
 
+  // COMMANDER VIEW
+  if (currentUser.role === 'COMMANDER') {
+    const students = users.filter(u => u.role === 'STUDENT')
+    const avgSafetyScore = Math.round(students.reduce((acc, s) => acc + (s.metrics?.safetyScore || 0), 0) / students.length)
+    const criticalVulnerabilities = students.filter(u => u.metrics && u.metrics.safetyScore < 90)
+
+    return (
+      <StitchDomainShell domainId="secure">
+        <StitchDomainHeader 
+          domainId="secure"
+          title="System Vulnerability Scanner"
+          description="Monitor fleet-wide digital safety posture and identify critical security vulnerabilities across assigned cadets."
+        />
+        
+        <div className="flex-1 grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div className="lg:col-span-1 space-y-6">
+            <StitchGlassCard className={`text-center transition-colors duration-700 ${avgSafetyScore > 90 ? 'border-[#00e676]/30 bg-[#00e676]/5' : 'border-[#ffc400]/30 bg-[#ffc400]/5'} relative overflow-hidden`}>
+               <div className="relative z-10 flex flex-col items-center">
+                  <div className={`p-4 rounded-2xl border mb-6 ${avgSafetyScore > 90 ? 'bg-[#00e676]/10 border-[#00e676]/30 text-[#00e676]' : 'bg-[#ffc400]/10 border-[#ffc400]/30 text-[#ffc400]'}`}>
+                    <Shield className="w-10 h-10" />
+                  </div>
+                  <h3 className="text-sm font-black tracking-widest uppercase text-zinc-400 mb-2">Fleet Safety Posture</h3>
+                  <div className={`text-6xl font-black mb-2 ${avgSafetyScore > 90 ? 'text-[#00e676]' : 'text-[#ffc400]'}`}>
+                    {avgSafetyScore}<span className="text-2xl opacity-50">/100</span>
+                  </div>
+                  <p className={`font-bold tracking-widest uppercase text-xs px-3 py-1 rounded-full border mt-2 ${avgSafetyScore > 90 ? 'text-[#00e676] border-[#00e676]/30 bg-[#00e676]/10' : 'text-[#ffc400] border-[#ffc400]/30 bg-[#ffc400]/10'}`}>
+                    {avgSafetyScore > 90 ? 'Secure' : 'Needs Review'}
+                  </p>
+               </div>
+            </StitchGlassCard>
+
+            <StitchGlassCard className="space-y-4 border-zinc-800">
+               <h4 className="text-xs font-black tracking-widest text-zinc-500 uppercase mb-4 flex items-center gap-2">
+                 <ShieldCheck className="w-4 h-4" /> Global Policies
+               </h4>
+               
+               {[
+                 { name: "Enforce 2FA", status: "Active", color: "text-[#00e676]" },
+                 { name: "Phishing Simulations", status: "Running", color: "text-[#00e5ff]" },
+                 { name: "Password Rotation (90d)", status: "Failing", color: "text-red-500" },
+               ].map(policy => (
+                 <div key={policy.name} className="flex items-center justify-between p-3 rounded-xl bg-zinc-900/50 border border-zinc-800">
+                    <span className="text-sm text-zinc-300 font-bold tracking-wide">{policy.name}</span>
+                    <span className={`text-[10px] font-black uppercase tracking-widest ${policy.color}`}>{policy.status}</span>
+                 </div>
+               ))}
+            </StitchGlassCard>
+          </div>
+
+          <div className="lg:col-span-2 space-y-6">
+            <StitchGlassCard className="h-full border-[#ffc400]/30 hover:border-[#ffc400]/50">
+              <div className="flex items-center justify-between mb-6">
+                <h3 className="text-lg font-black tracking-widest text-white uppercase flex items-center gap-3">
+                  <div className="p-2 rounded-xl bg-[#ffc400]/10 border border-[#ffc400]/30">
+                    <AlertCircle className="w-5 h-5 text-[#ffc400]" />
+                  </div>
+                  Cadet Vulnerability Log
+                </h3>
+              </div>
+              
+              <div className="space-y-4">
+                {criticalVulnerabilities.map(cadet => (
+                  <div key={cadet.id} className="p-4 rounded-xl border border-red-500/30 bg-red-500/5 flex items-center justify-between">
+                     <div className="flex items-center gap-4">
+                        <div className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 ${cadet.avatarColor}/20 border border-red-500/50 text-red-500 font-bold`}>
+                           {cadet.name[0]}
+                        </div>
+                        <div>
+                           <h4 className="font-bold text-white text-sm">{cadet.name}</h4>
+                           <p className="text-xs text-red-400 font-medium tracking-wide">Critical: No 2FA Enabled</p>
+                        </div>
+                     </div>
+                     <div className="flex items-center gap-4">
+                        <div className="text-right">
+                           <div className="text-red-500 font-mono font-bold text-lg">{cadet.metrics?.safetyScore}</div>
+                           <div className="text-[10px] uppercase tracking-widest text-zinc-500">Score</div>
+                        </div>
+                        <button className="px-3 py-1.5 bg-red-500/10 hover:bg-red-500/20 text-red-500 border border-red-500/30 rounded-lg text-[10px] font-bold uppercase tracking-widest transition-colors">
+                          Enforce
+                        </button>
+                     </div>
+                  </div>
+                ))}
+                
+                {/* Mock a resolved log */}
+                <div className="p-4 rounded-xl border border-zinc-800 bg-zinc-900/50 flex items-center justify-between opacity-60">
+                     <div className="flex items-center gap-4">
+                        <div className="w-10 h-10 rounded-full flex items-center justify-center shrink-0 bg-zinc-800 border border-zinc-700 text-zinc-400 font-bold">
+                           A
+                        </div>
+                        <div>
+                           <h4 className="font-bold text-zinc-400 text-sm">Student Alpha</h4>
+                           <p className="text-xs text-zinc-500 font-medium tracking-wide">Resolved: Suspicious Login</p>
+                        </div>
+                     </div>
+                     <div className="flex items-center gap-4">
+                        <div className="text-right">
+                           <div className="text-[#00e676] font-mono font-bold text-lg">99</div>
+                           <div className="text-[10px] uppercase tracking-widest text-zinc-600">Score</div>
+                        </div>
+                     </div>
+                </div>
+              </div>
+            </StitchGlassCard>
+          </div>
+        </div>
+      </StitchDomainShell>
+    )
+  }
+
+  // STUDENT VIEW
   return (
     <StitchDomainShell domainId="secure">
       <StitchDomainHeader 

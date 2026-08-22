@@ -4,20 +4,28 @@ import { useState } from "react"
 import { StitchDomainShell } from "@/components/stitch/stitch-domain-shell"
 import { StitchDomainHeader } from "@/components/stitch/stitch-domain-header"
 import { StitchGlassCard } from "@/components/stitch/stitch-glass-card"
-import { Search, Link as LinkIcon, Database, Filter, Loader2, Network } from "lucide-react"
+import { Search, Link as LinkIcon, Database, Filter, Loader2, Network, Server, Zap, AlertTriangle } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
+import { useAuth } from "@/lib/auth-context"
+import { fetchApi } from "@/lib/api-client"
 
 export default function ConnectPage() {
+  const { currentUser, users } = useAuth()
+  
+  // Student State
   const [isInitialized, setIsInitialized] = useState(false)
   const [isInitializing, setIsInitializing] = useState(false)
   const [searchQuery, setSearchQuery] = useState("")
 
-  const handleInitialize = () => {
+  const handleInitialize = async () => {
     setIsInitializing(true)
-    setTimeout(() => {
-      setIsInitializing(false)
-      setIsInitialized(true)
-    }, 2500)
+    try {
+      await fetchApi('/intelligence/overview')
+    } catch (err) {
+      console.error(err)
+    }
+    setIsInitializing(false)
+    setIsInitialized(true)
   }
 
   const nodes = [
@@ -46,6 +54,123 @@ export default function ConnectPage() {
 
   const filteredEntities = entities.filter(e => e.name.toLowerCase().includes(searchQuery.toLowerCase()))
 
+  // COMMANDER VIEW
+  if (currentUser.role === 'COMMANDER') {
+    return (
+      <StitchDomainShell domainId="connect">
+        <StitchDomainHeader 
+          domainId="connect"
+          title="System Integration Health"
+          description="Monitor fleet-wide data pipelines, API health, and node synchronization across the Cypherverse."
+        />
+        
+        <div className="flex-1 grid grid-cols-1 lg:grid-cols-4 gap-6">
+          <div className="lg:col-span-3">
+            <StitchGlassCard className="h-full min-h-[500px] flex flex-col relative overflow-hidden border-[#7c4dff]/40 shadow-[0_0_40px_rgba(124,77,255,0.15)]">
+              <div className="absolute inset-0 bg-[#7c4dff]/5 pointer-events-none" />
+              <div className="absolute inset-0 pointer-events-none opacity-10" 
+                   style={{ backgroundImage: 'linear-gradient(#7c4dff 1px, transparent 1px), linear-gradient(90deg, #7c4dff 1px, transparent 1px)', backgroundSize: '50px 50px' }} 
+              />
+
+              <div className="flex items-center justify-between mb-8 relative z-10 p-2">
+                <h3 className="text-lg font-black tracking-widest text-white uppercase flex items-center gap-3">
+                  <div className="p-2 rounded-xl bg-[#7c4dff]/10 border border-[#7c4dff]/30">
+                    <Server className="w-5 h-5 text-[#7c4dff]" />
+                  </div>
+                  Global Infrastructure Topology
+                </h3>
+                
+                <div className="px-5 py-2.5 rounded-xl border border-[#00e676]/30 bg-[#00e676]/10 text-[#00e676] text-xs font-bold uppercase tracking-widest flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-[#00e676] animate-pulse" /> Grid Operational
+                </div>
+              </div>
+              
+              <div className="flex-1 relative w-full h-full min-h-[400px] z-10 flex items-center justify-center">
+                 <svg className="absolute inset-0 w-full h-full pointer-events-none">
+                    {edges.map((edge, i) => {
+                      const fromNode = nodes.find(n => n.id === edge.from)
+                      const toNode = nodes.find(n => n.id === edge.to)
+                      if (!fromNode || !toNode) return null
+                      return (
+                        <motion.line 
+                          key={`edge-${edge.from}-${edge.to}`}
+                          initial={{ pathLength: 0, opacity: 0 }}
+                          animate={{ pathLength: 1, opacity: 1 }}
+                          transition={{ duration: 1, delay: i * 0.2, ease: "easeInOut" }}
+                          x1={fromNode.x} y1={fromNode.y} 
+                          x2={toNode.x} y2={toNode.y} 
+                          stroke="#7c4dff" 
+                          strokeWidth="2" 
+                          strokeDasharray="4 4"
+                          className="opacity-60"
+                        />
+                      )
+                    })}
+                 </svg>
+
+                 {nodes.map((node, i) => (
+                   <motion.div
+                     key={`node-${node.id}`}
+                     initial={{ opacity: 0, scale: 0 }}
+                     animate={{ opacity: 1, scale: 1 }}
+                     transition={{ type: "spring", stiffness: 200, damping: 15, delay: i * 0.15 }}
+                     className="absolute -translate-x-1/2 -translate-y-1/2 flex flex-col items-center group cursor-pointer"
+                     style={{ left: node.x, top: node.y }}
+                   >
+                     <motion.div 
+                       className="absolute w-full h-full bg-[#7c4dff]/20 rounded-full blur-md"
+                       animate={{ scale: [1, 1.5, 1], opacity: [0.5, 0.2, 0.5] }}
+                       transition={{ duration: 2, repeat: Infinity, delay: i * 0.5 }}
+                     />
+                     
+                     <div className={`relative z-10 flex items-center justify-center rounded-full border-2 border-[#7c4dff] shadow-[0_0_15px_rgba(124,77,255,0.6)] bg-black transition-transform group-hover:scale-125 ${
+                       node.type === 'primary' ? 'w-16 h-16' : node.type === 'secondary' ? 'w-10 h-10' : 'w-6 h-6'
+                     }`}>
+                       {node.type === 'primary' && <Database className="w-6 h-6 text-[#7c4dff]" />}
+                       {node.type === 'secondary' && <Server className="w-4 h-4 text-[#7c4dff]" />}
+                     </div>
+                     
+                     <div className="mt-3 text-[10px] font-black tracking-widest uppercase text-white bg-black/80 px-2 py-1 rounded border border-[#7c4dff]/30 opacity-100 whitespace-nowrap">
+                       {node.id === 1 ? 'Central DB Cluster' : node.id === 2 ? 'Auth Gateway' : node.id === 3 ? 'Telemetry Sync' : 'Edge Node'}
+                     </div>
+                   </motion.div>
+                 ))}
+              </div>
+            </StitchGlassCard>
+          </div>
+
+          <div className="lg:col-span-1 space-y-6">
+            <StitchGlassCard className="border-[#00e676]/30 bg-[#00e676]/5 text-center">
+               <h3 className="text-sm font-black tracking-widest uppercase text-[#00e676] mb-2 flex items-center justify-center gap-2">
+                 <Zap className="w-4 h-4" /> API Latency
+               </h3>
+               <div className="text-5xl font-black text-white drop-shadow-[0_0_15px_rgba(0,230,118,0.5)] mb-2">42ms</div>
+               <p className="text-xs font-bold text-[#00e676]/80 uppercase tracking-widest">P99 Optimal</p>
+            </StitchGlassCard>
+
+            <StitchGlassCard className="border-[#ffc400]/30 bg-[#ffc400]/5 h-full flex flex-col">
+               <h3 className="text-sm font-black tracking-widest uppercase text-[#ffc400] mb-4 flex items-center gap-2">
+                 <AlertTriangle className="w-4 h-4" /> Sync Warnings
+               </h3>
+               <div className="flex-1 space-y-3">
+                 <div className="p-3 bg-black border border-[#ffc400]/20 rounded-lg">
+                    <h4 className="text-white font-bold text-xs mb-1">GitHub API Rate Limit</h4>
+                    <p className="text-[10px] text-zinc-400 font-medium uppercase tracking-widest">Approaching quota. 85% used.</p>
+                 </div>
+                 <div className="p-3 bg-black border border-[#ffc400]/20 rounded-lg">
+                    <h4 className="text-white font-bold text-xs mb-1">Stale Cache: LeetCode</h4>
+                    <p className="text-[10px] text-zinc-400 font-medium uppercase tracking-widest">Node sync delayed by 15m.</p>
+                 </div>
+               </div>
+            </StitchGlassCard>
+          </div>
+        </div>
+      </StitchDomainShell>
+    )
+  }
+
+
+  // STUDENT VIEW
   return (
     <StitchDomainShell domainId="connect">
       <StitchDomainHeader 
