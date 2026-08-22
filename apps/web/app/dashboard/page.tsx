@@ -1,71 +1,108 @@
 "use client";
 
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { authClient } from '@/lib/auth/auth-client';
-import { UserResponse } from '@/lib/auth/auth-types';
+import { AppLayout } from '@/components/layout/AppLayout';
+import { intelligenceApi } from '@/lib/api/intelligence';
+import { UnifiedOverview } from '@/types/intelligence';
+import { OverallHealthCard } from '@/components/dashboard/OverallHealthCard';
+import { DomainHealthGrid } from '@/components/dashboard/DomainHealthGrid';
+import { CrossDomainInsightCard } from '@/components/dashboard/CrossDomainInsightCard';
+import { PriorityActions } from '@/components/dashboard/PriorityActions';
+import { Skeleton } from '@/components/ui/Skeleton';
 
 export default function DashboardPage() {
-    const router = useRouter();
-    const [user, setUser] = useState<UserResponse | null>(null);
+    const [overview, setOverview] = useState<UnifiedOverview | null>(null);
     const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        const checkAuth = async () => {
+        const fetchOverview = async () => {
             try {
-                const res = await authClient.getMe();
-                if (res.success && res.data) {
-                    setUser(res.data);
-                } else {
-                    router.push('/login');
-                }
-            } catch {
-                router.push('/login');
+                const data = await intelligenceApi.getOverview();
+                setOverview(data);
+            } catch (err: unknown) {
+                const error = err as Error;
+                setError(error.message || "Failed to load intelligence overview");
             } finally {
                 setLoading(false);
             }
         };
 
-        checkAuth();
-    }, [router]);
+        fetchOverview();
+    }, []);
 
     if (loading) {
         return (
-            <div className="flex min-h-screen items-center justify-center">
-                <p className="text-gray-500">Loading...</p>
-            </div>
+            <AppLayout>
+                <div className="space-y-8 animate-pulse">
+                    <Skeleton className="h-48 w-full max-w-sm rounded-xl" />
+                    <Skeleton className="h-32 w-full rounded-xl" />
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                        <Skeleton className="h-64 rounded-xl" />
+                        <Skeleton className="h-64 rounded-xl" />
+                    </div>
+                </div>
+            </AppLayout>
         );
     }
 
-    if (!user) return null; // Prevent flash before redirect
+    if (error) {
+        return (
+            <AppLayout>
+                <div className="rounded-md bg-red-50 p-4 border border-red-200">
+                    <h3 className="text-sm font-medium text-red-800">API Connection Failed</h3>
+                    <div className="mt-2 text-sm text-red-700">
+                        <p>{error}</p>
+                    </div>
+                </div>
+            </AppLayout>
+        );
+    }
 
-    const handleLogout = async () => {
-        await authClient.logout();
-        router.push('/login');
-    };
+    if (!overview) return null;
 
     return (
-        <div className="min-h-screen bg-gray-50 p-8">
-            <header className="mb-8 flex items-center justify-between">
-                <div>
-                    <h1 className="text-3xl font-bold tracking-tight text-gray-900">Dashboard</h1>
-                    <p className="text-sm text-gray-500 mt-1">Welcome back, {user.email}</p>
+        <AppLayout>
+            <div className="space-y-8 max-w-7xl mx-auto">
+                <header>
+                    <h1 className="text-3xl font-bold tracking-tight text-gray-900">Intelligence Overview</h1>
+                    <p className="text-sm text-gray-500 mt-1">Unified insights across all SANKALP domains.</p>
+                </header>
+
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <div className="lg:col-span-1">
+                        <OverallHealthCard score={overview.overall_health} />
+                    </div>
+                    <div className="lg:col-span-2">
+                        <DomainHealthGrid 
+                            scores={overview.domain_scores} 
+                            trends={overview.trends} 
+                            dataQuality={overview.data_quality} 
+                        />
+                    </div>
                 </div>
-                <button
-                    onClick={handleLogout}
-                    className="rounded-md bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
-                >
-                    Sign out
-                </button>
-            </header>
-            <main>
-                <div className="rounded-lg bg-white p-6 shadow-sm">
-                    <h2 className="text-lg font-medium text-gray-900">Sankalp Intelligence Engines</h2>
-                    <p className="mt-2 text-sm text-gray-500">
-                        This is the protected application shell. Domain intelligence modules will be mounted here.
-                    </p>
+
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <div className="space-y-6">
+                        <h2 className="text-xl font-semibold text-gray-900 border-b border-gray-200 pb-2">Cross-Domain Insights</h2>
+                        {overview.top_insights.length === 0 ? (
+                            <div className="rounded-xl border border-gray-200 bg-gray-50 p-8 text-center">
+                                <p className="text-sm text-gray-500">No active cross-domain insights detected.</p>
+                            </div>
+                        ) : (
+                            <div className="space-y-4">
+                                {overview.top_insights.map(insight => (
+                                    <CrossDomainInsightCard key={insight.id} insight={insight} />
+                                ))}
+                            </div>
+                        )}
+                    </div>
+
+                    <div>
+                        <PriorityActions recommendations={overview.top_recommendations} />
+                    </div>
                 </div>
-            </main>
-        </div>
+            </div>
+        </AppLayout>
     );
 }

@@ -47,6 +47,8 @@ class RoleSkillRequirement(Base, TimestampMixin):
     required_proficiency = Column(Integer, nullable=False, default=1)
     weight = Column(Float, nullable=True)
 
+    skill = relationship("Skill")
+
 class CareerRoadmap(Base, TimestampMixin):
     __tablename__ = "career_roadmaps"
 

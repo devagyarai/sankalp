@@ -211,6 +211,49 @@ Error Response:
 - **Errors**: `UNAUTHORIZED`, `VALIDATION_ERROR` (Strictly enforced content types)
 - **Auth**: Required
 
+### Intelligence
+**GET** `/api/v1/intelligence/overview`
+- **Purpose**: Get a unified cross-domain intelligence overview combining signals from all 6 engines.
+- **Request**: None
+- **Response**: `UnifiedOverview` (overall_health, domain_scores, trends, top_insights, top_recommendations, priority_actions, data_quality)
+- **Errors**: `UNAUTHORIZED`
+- **Auth**: Required
+
+**GET** `/api/v1/intelligence/focus`
+- **Purpose**: Get StudySync intelligence and recommendations
+- **Request**: None
+- **Response**: `IntelligenceOutput`
+- **Errors**: `UNAUTHORIZED`
+- **Auth**: Required
+
+**GET** `/api/v1/intelligence/trajectory`
+- **Purpose**: Get SkillMap gap analysis and recommendations
+- **Request**: None
+- **Response**: `IntelligenceOutput`
+- **Errors**: `UNAUTHORIZED`
+- **Auth**: Required
+
+**GET** `/api/v1/intelligence/pulse`
+- **Purpose**: Get EduPulse academic risk analysis
+- **Request**: None
+- **Response**: `IntelligenceOutput`
+- **Errors**: `UNAUTHORIZED`
+- **Auth**: Required
+
+**GET** `/api/v1/intelligence/shield`
+- **Purpose**: Get Digital Safety vulnerabilities and score
+- **Request**: None
+- **Response**: `IntelligenceOutput`
+- **Errors**: `UNAUTHORIZED`
+- **Auth**: Required
+
+**GET** `/api/v1/intelligence/nexus/{analysis_id}`
+- **Purpose**: Correlate a threat analysis with historical threats
+- **Request**: Path param `analysis_id`
+- **Response**: `IntelligenceOutput`
+- **Errors**: `UNAUTHORIZED`, `NOT_FOUND`
+- **Auth**: Required
+
 ### Chat
 **POST** `/api/v1/chat/query`
 - **Purpose**: Send query to Cypherverse CHAT-1

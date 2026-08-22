@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 
-from app.api import academic, auth, career, chat, dashboard, health, safety, study, threat
+from app.api import academic, auth, career, chat, dashboard, health, intelligence, safety, study, threat
 
 api_router = APIRouter()
 
@@ -13,3 +13,4 @@ api_router.include_router(career.router, prefix="/career", tags=["career"])
 api_router.include_router(safety.router, prefix="/safety", tags=["safety"])
 api_router.include_router(threat.router, prefix="/threat", tags=["threat"])
 api_router.include_router(chat.router, prefix="/chat", tags=["chat"])
+api_router.include_router(intelligence.router)
