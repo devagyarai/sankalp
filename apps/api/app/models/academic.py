@@ -1,5 +1,6 @@
+from sqlalchemy import JSON as JSONB
 from sqlalchemy import Column, Float, ForeignKey, String
-from sqlalchemy import JSON as JSONB, Uuid as UUID
+from sqlalchemy import Uuid as UUID
 from sqlalchemy.orm import relationship
 
 from app.models.base import Base, TimestampMixin, generate_uuid

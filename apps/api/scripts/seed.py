@@ -1,17 +1,17 @@
 import os
 import sys
 import uuid
-from datetime import datetime, timezone
 
 # Add apps/api to sys.path
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from app.core.database import SessionLocal
-from app.models.user import User
-from app.models.study import StudyPlan, StudySession
-from app.models.academic import AcademicSnapshot, AcademicCourse, AcademicAssessment, AcademicResult
+from app.models.academic import AcademicAssessment, AcademicCourse, AcademicResult, AcademicSnapshot
 from app.models.career import CareerProfile, Skill
-from app.models.safety import SafetyAssessment, SafetyScore, SafetyRecommendation
+from app.models.safety import SafetyAssessment, SafetyRecommendation, SafetyScore
+from app.models.study import StudyPlan, StudySession
+from app.models.user import User
+
 
 def seed():
     db = SessionLocal()
