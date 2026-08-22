@@ -7,19 +7,14 @@ from sqlalchemy.dialects.postgresql import JSONB
 
 from app.main import app as fastapi_app
 from app.core.database import get_db
+import app.models  # Registers all models with Base.metadata
 from app.models.base import Base
-import app.models.user  # import models to register with Base.metadata
-import app.models.academic
-import app.models.career
-import app.models.safety
-import app.models.study
-import app.models.audit
 
 @compiles(JSONB, "sqlite")
 def compile_jsonb_sqlite(type_, compiler, **kw):
     return "JSON"
 
-SQLALCHEMY_DATABASE_URL = "sqlite:///:memory:"
+SQLALCHEMY_DATABASE_URL = "sqlite:///./test.db"
 
 engine = create_engine(
     SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False}
