@@ -7,6 +7,7 @@ import { authClient } from '@/lib/auth/auth-client';
 import { UserResponse } from '@/lib/auth/auth-types';
 import { Activity, Bell, Compass, LayoutDashboard, Shield, ShieldAlert, Settings, User, LogOut } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { ChatWidget } from '@/components/chatbot/ChatWidget';
 
 const NAVIGATION = [
     { name: 'Dashboard', href: '/dashboard', icon: <LayoutDashboard /> },
@@ -129,6 +130,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
                     {children}
                 </div>
                 
+                <ChatWidget />
             </main>
         </div>
     );

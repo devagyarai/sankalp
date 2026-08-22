@@ -1,0 +1,104 @@
+{
+  "faqs": [
+    {
+      "question": "What is SANKALP?",
+      "answer": "SANKALP is an intelligent student platform combining academic, career, and safety domains into a unified dashboard.",
+      "category": "general"
+    },
+    {
+      "question": "What does SANKALP do?",
+      "answer": "It provides deterministic insights, predicts risks, and suggests Next Best Actions across your study habits, career trajectory, and digital safety.",
+      "category": "general"
+    },
+    {
+      "question": "What is FOCUS?",
+      "answer": "The FOCUS domain (StudySync) handles study planning, time optimization, and task execution tracking.",
+      "category": "domains"
+    },
+    {
+      "question": "What is PULSE?",
+      "answer": "The PULSE domain (EduPulse) tracks your academic health, grades, and detects performance risks.",
+      "category": "domains"
+    },
+    {
+      "question": "What is TRAJECTORY?",
+      "answer": "The TRAJECTORY domain (SkillMap) maps your skills against career goals and suggests learning paths.",
+      "category": "domains"
+    },
+    {
+      "question": "What is SHIELD?",
+      "answer": "The SHIELD domain monitors your digital safety score and provides privacy recommendations.",
+      "category": "domains"
+    },
+    {
+      "question": "What is SENTINEL?",
+      "answer": "The SENTINEL domain (ScamShield) analyzes texts, emails, and messages to detect potential scams and threats.",
+      "category": "domains"
+    },
+    {
+      "question": "What is NEXUS?",
+      "answer": "The NEXUS domain correlates threats across networks to provide cross-domain intelligence and early warnings.",
+      "category": "domains"
+    },
+    {
+      "question": "What is the dashboard?",
+      "answer": "The Command Center dashboard gives you a unified overview of all your domain health scores and priority actions.",
+      "category": "navigation"
+    },
+    {
+      "question": "How does SANKALP generate insights?",
+      "answer": "SANKALP uses a deterministic intelligence engine built on FastAPI that analyzes your raw domain data without relying on external hallucination-prone LLMs.",
+      "category": "intelligence"
+    },
+    {
+      "question": "Are the intelligence recommendations real?",
+      "answer": "Yes, all recommendations are generated from your actual data by the backend intelligence layer.",
+      "category": "intelligence"
+    },
+    {
+      "question": "What does the overall health score mean?",
+      "answer": "It's a weighted aggregate of your performance across the FOCUS, PULSE, TRAJECTORY, and SHIELD domains.",
+      "category": "dashboard"
+    },
+    {
+      "question": "What are cross-domain insights?",
+      "answer": "These are intelligent observations generated when signals from multiple domains (e.g., poor sleep in PULSE and dropped grades in FOCUS) correlate to form a bigger picture.",
+      "category": "intelligence"
+    },
+    {
+      "question": "How does threat analysis work?",
+      "answer": "The SENTINEL domain uses deterministic rules and known signatures to classify text content as safe, suspicious, or a scam.",
+      "category": "security"
+    },
+    {
+      "question": "What should I do if a threat is detected?",
+      "answer": "Do not interact with the suspicious content, block the sender, and follow the priority actions listed in your SHIELD dashboard.",
+      "category": "security"
+    },
+    {
+      "question": "How does authentication work?",
+      "answer": "SANKALP uses secure HTTP-only cookies and JWT tokens to verify your identity and protect your session.",
+      "category": "security"
+    },
+    {
+      "question": "How do I use the dashboard?",
+      "answer": "Review your domain health grid daily, check the glowing Next Best Action banner, and complete your Priority Actions.",
+      "category": "navigation"
+    },
+    {
+      "question": "How does SANKALP protect user data?",
+      "answer": "SANKALP enforces strict Role-Based Access Control (RBAC), data isolation boundaries, and deterministic processing to ensure privacy.",
+      "category": "security"
+    },
+    {
+      "question": "What does \"insufficient data\" mean?",
+      "answer": "It means a domain hasn't collected enough signals (like study hours or grades) to generate a reliable health score or trend.",
+      "category": "dashboard"
+    },
+    {
+      "question": "How can I improve my recommendations?",
+      "answer": "Interact with the platform more! Log your study sessions in FOCUS and update your grades in PULSE to give the intelligence engine more context.",
+      "category": "general"
+    }
+  ]
+}
