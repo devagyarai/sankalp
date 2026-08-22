@@ -32,5 +32,8 @@ jobs:
         ruff check .
         
     - name: Test with pytest
+      env:
+        DATABASE_URL: postgresql://postgres:postgres@localhost:5432/test_db
+        SESSION_SECRET: test-secret-key-for-ci
       run: |
         pytest
