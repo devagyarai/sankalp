@@ -2,7 +2,7 @@
 
 import * as React from "react"
 import { motion } from "framer-motion"
-import { AlertTriangle, ArrowRight, CheckCircle2, Play } from "lucide-react"
+import { AlertTriangle, ArrowRight, Play } from "lucide-react"
 import { IntelligenceRecommendationSchema } from "@/types/intelligence"
 import { GlassCard } from "./ui/glass-card"
 import { Button } from "./ui/Button"

@@ -2,7 +2,7 @@
 
 import * as React from "react"
 import { motion } from "framer-motion"
-import { CheckCircle, BookOpen } from "lucide-react"
+import { BookOpen } from "lucide-react"
 import { IntelligenceRecommendationSchema } from "@/types/intelligence"
 import { LivingCard } from "./ui/living-card"
 import { Badge } from "./ui/Badge"

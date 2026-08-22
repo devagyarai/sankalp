@@ -5,7 +5,6 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { MessageSquare, X, Send, Bot, Sparkles } from 'lucide-react';
 import { findBestAnswer } from '@/lib/chatbot';
 import { cn } from '@/lib/utils';
-import { GlassCard } from '@/components/ui/glass-card';
 
 interface Message {
   id: string;
@@ -68,14 +67,12 @@ export function ChatWidget() {
       
       if (match) {
         setMessages(prev => [...prev, {
-          // eslint-disable-next-line react-hooks/purity
           id: (Date.now() + 1).toString(),
           role: 'bot',
           content: match.answer
         }]);
       } else {
         setMessages(prev => [...prev, {
-          // eslint-disable-next-line react-hooks/purity
           id: (Date.now() + 1).toString(),
           role: 'bot',
           content: "I don't have a reliable answer for that yet.",

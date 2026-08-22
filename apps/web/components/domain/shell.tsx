@@ -1,7 +1,6 @@
 "use client"
 
 import Link from "next/link"
-import { usePathname } from "next/navigation"
 import { motion } from "framer-motion"
 import { DOMAINS, DOMAIN_LIST, DomainId } from "@/lib/domains"
 import { ArrowLeft } from "lucide-react"
@@ -68,8 +67,6 @@ export function DomainShell({
 }
 
 function DomainSwitcher({ currentDomainId }: { currentDomainId: DomainId }) {
-  const pathname = usePathname()
-
   return (
     <div className="hidden md:flex items-center gap-2 bg-white/[0.02] border border-white/5 p-1 rounded-full">
       {DOMAIN_LIST.map((d) => {

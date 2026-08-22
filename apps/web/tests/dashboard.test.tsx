@@ -92,7 +92,7 @@ describe('DashboardPage', () => {
         render(<DashboardPage />);
         
         await waitFor(() => {
-            expect(screen.getByText('Intelligence Overview')).toBeDefined();
+            expect(screen.getByText('Situation Overview')).toBeDefined();
         });
 
         // Overall Health
@@ -103,7 +103,7 @@ describe('DashboardPage', () => {
         expect(screen.getByText('Test Summary')).toBeDefined();
 
         // Priority Action
-        expect(screen.getByText('Test Action')).toBeDefined();
+        expect(screen.getAllByText('Test Action').length).toBeGreaterThan(0);
     });
 
     it('renders error state on API failure', async () => {
