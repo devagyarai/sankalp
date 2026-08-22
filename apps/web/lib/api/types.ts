@@ -2,7 +2,7 @@
 export interface StandardResponse<T> {
   success: boolean;
   data: T;
-  meta?: Record<string, any>;
+  meta?: Record<string, unknown>;
 }
 
 export interface PaginationMeta {
@@ -20,7 +20,7 @@ export interface StandardListResponse<T> {
 export interface ErrorDetails {
   code: string;
   message: string;
-  details?: Record<string, any>;
+  details?: Record<string, unknown>;
 }
 
 export interface ErrorResponse {
@@ -120,7 +120,7 @@ export interface SkillProfile {
 // 5. Safety
 export interface SafetyScore {
   overall_score: number;
-  categories: any[];
+  categories: unknown[];
 }
 export interface SafetyRecommendation {
   id: string;

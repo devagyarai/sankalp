@@ -36,11 +36,11 @@ class ApiClient {
         return this.request<T>(endpoint, { method: 'GET', headers });
     }
 
-    async post<T>(endpoint: string, body: any, headers?: HeadersInit): Promise<T> {
+    async post<T>(endpoint: string, body: unknown, headers?: HeadersInit): Promise<T> {
         return this.request<T>(endpoint, { method: 'POST', body: JSON.stringify(body), headers });
     }
 
-    async patch<T>(endpoint: string, body: any, headers?: HeadersInit): Promise<T> {
+    async patch<T>(endpoint: string, body: unknown, headers?: HeadersInit): Promise<T> {
         return this.request<T>(endpoint, { method: 'PATCH', body: JSON.stringify(body), headers });
     }
 

@@ -27,8 +27,8 @@ export default function RegisterPage() {
                     router.push('/dashboard');
                 }
             }
-        } catch (err: any) {
-            setError(err.message || 'Registration failed');
+        } catch {
+            setError('An unexpected error occurred. Please try again.');
         } finally {
             setLoading(false);
         }

@@ -3,11 +3,11 @@ import { StandardResponse } from '../api/types';
 import { UserResponse } from './auth-types';
 
 class AuthClient {
-    async register(data: any): Promise<StandardResponse<UserResponse>> {
+    async register(data: unknown): Promise<StandardResponse<UserResponse>> {
         return apiClient.post<StandardResponse<UserResponse>>('/auth/register', data);
     }
 
-    async login(data: any): Promise<StandardResponse<UserResponse>> {
+    async login(data: unknown): Promise<StandardResponse<UserResponse>> {
         return apiClient.post<StandardResponse<UserResponse>>('/auth/login', data);
     }
 
