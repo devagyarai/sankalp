@@ -15,10 +15,12 @@ interface Message {
 }
 
 const SUGGESTED_QUESTIONS = [
-  "What is SANKALP?",
-  "How does SANKALP generate insights?",
-  "What is threat analysis?",
-  "Tell me about FOCUS"
+  "FOCUS",
+  "TRAJECTORY",
+  "PULSE",
+  "SHIELD",
+  "SENTINEL",
+  "NEXUS"
 ];
 
 export function ChatWidget() {
@@ -76,7 +78,7 @@ export function ChatWidget() {
           // eslint-disable-next-line react-hooks/purity
           id: (Date.now() + 1).toString(),
           role: 'bot',
-          content: "I couldn't find a reliable answer for that yet. I can only answer questions based on the static SANKALP knowledge base.",
+          content: "I don't have a reliable answer for that yet.",
           isFallback: true
         }]);
       }
@@ -101,18 +103,26 @@ export function ChatWidget() {
             exit={{ opacity: 0, y: 20, scale: 0.95, transition: { duration: 0.2 } }}
             className="fixed bottom-24 right-6 w-80 sm:w-96 h-[500px] z-50 flex flex-col shadow-2xl rounded-2xl overflow-hidden"
           >
-            <GlassCard className="flex flex-col h-full border-primary/20 bg-background/80 backdrop-blur-xl p-0 overflow-hidden relative">
+            <div 
+              className="flex flex-col h-full relative" 
+              style={{ 
+                background: "rgba(5, 5, 8, 0.88)", 
+                border: "1px solid rgba(100, 180, 255, 0.15)",
+                backdropFilter: "blur(16px)",
+                WebkitBackdropFilter: "blur(16px)"
+              }}
+            >
               {/* Header */}
-              <div className="flex items-center justify-between p-4 border-b border-border/40 bg-card/50">
+              <div className="flex items-center justify-between p-4 border-b" style={{ borderColor: "rgba(100, 180, 255, 0.1)" }}>
                 <div className="flex items-center gap-3">
                   <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center">
                     <Bot className="w-5 h-5 text-primary" />
                   </div>
                   <div>
                     <h3 className="font-semibold text-sm">SANKALP Assistant</h3>
-                    <p className="text-xs text-muted-foreground flex items-center gap-1">
-                      <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
-                      Online
+                    <p className="text-[10px] tracking-widest text-muted-foreground flex items-center gap-1 mt-0.5">
+                      <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
+                      STATIC INTELLIGENCE
                     </p>
                   </div>
                 </div>
@@ -218,7 +228,7 @@ export function ChatWidget() {
                   </p>
                 </div>
               </div>
-            </GlassCard>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>

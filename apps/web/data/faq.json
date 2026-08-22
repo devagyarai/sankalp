@@ -2,103 +2,326 @@
   "faqs": [
     {
       "question": "What is SANKALP?",
-      "answer": "SANKALP is an intelligent student platform combining academic, career, and safety domains into a unified dashboard.",
-      "category": "general"
+      "answer": "SANKALP is a unified intelligence platform that brings together your academic, career, and digital safety data. It provides deterministic insights to guide your daily decisions.",
+      "category": "general",
+      "aliases": [],
+      "keywords": [
+        "sankalp",
+        "app",
+        "purpose"
+      ]
     },
     {
       "question": "What does SANKALP do?",
-      "answer": "It provides deterministic insights, predicts risks, and suggests Next Best Actions across your study habits, career trajectory, and digital safety.",
-      "category": "general"
+      "answer": "SANKALP unifies academic, career and digital-safety signals into one intelligence platform. Its deterministic intelligence engine analyzes those signals, identifies risks and surfaces Next Best Actions.",
+      "category": "general",
+      "aliases": [],
+      "keywords": [
+        "features",
+        "do",
+        "capabilities"
+      ]
     },
     {
       "question": "What is FOCUS?",
-      "answer": "The FOCUS domain (StudySync) handles study planning, time optimization, and task execution tracking.",
-      "category": "domains"
+      "answer": "FOCUS helps you study more effectively by identifying priorities, surfacing useful actions, and turning your study-related signals into practical next steps.",
+      "category": "domains",
+      "aliases": [
+        "How can you help me study?",
+        "How can this help me study?",
+        "I'm struggling to organize my studies",
+        "How do I plan my study time?",
+        "How can I improve my study routine?",
+        "What should I focus on studying?",
+        "Can this help me prioritize my study tasks?",
+        "I'm falling behind in my studies"
+      ],
+      "keywords": [
+        "study",
+        "focus",
+        "studysync",
+        "tasks",
+        "organize",
+        "plan",
+        "time"
+      ]
     },
     {
       "question": "What is PULSE?",
-      "answer": "The PULSE domain (EduPulse) tracks your academic health, grades, and detects performance risks.",
-      "category": "domains"
+      "answer": "PULSE tracks your academic health and grades to detect early risks. It provides a steady trend analysis so you can act before a minor issue becomes a major problem.",
+      "category": "domains",
+      "aliases": [
+        "Why are my grades dropping?",
+        "Can you detect academic problems?",
+        "Am I at academic risk?",
+        "How can I improve my academic performance?",
+        "I'm struggling academically",
+        "Can SANKALP warn me before I fail?",
+        "my grades are falling",
+        "my grades are getting worse"
+      ],
+      "keywords": [
+        "grades",
+        "academic",
+        "pulse",
+        "edupulse",
+        "performance",
+        "risk",
+        "trend",
+        "fail"
+      ]
     },
     {
       "question": "What is TRAJECTORY?",
-      "answer": "The TRAJECTORY domain (SkillMap) maps your skills against career goals and suggests learning paths.",
-      "category": "domains"
+      "answer": "TRAJECTORY helps you understand which skills matter for your career goals and suggests learning paths to help you build them.",
+      "category": "domains",
+      "aliases": [
+        "How can this help with my career?",
+        "What career should I choose?",
+        "How do I know what skills I need?",
+        "What should I learn for my career?",
+        "what skills should I learn?",
+        "Can this help me plan my career?",
+        "Which skills should I develop?",
+        "does this tell me what career I should choose?"
+      ],
+      "keywords": [
+        "career",
+        "skills",
+        "trajectory",
+        "skillmap",
+        "learning",
+        "goals"
+      ]
     },
     {
       "question": "What is SHIELD?",
-      "answer": "The SHIELD domain monitors your digital safety score and provides privacy recommendations.",
-      "category": "domains"
+      "answer": "SHIELD monitors your digital safety score and provides practical privacy recommendations to help reduce your personal digital risk.",
+      "category": "domains",
+      "aliases": [
+        "How safe am I online?",
+        "Am I digitally safe?",
+        "How can I improve my online privacy?",
+        "What is my digital safety score?",
+        "Can SANKALP help protect my digital identity?",
+        "what is my digital safety?"
+      ],
+      "keywords": [
+        "shield",
+        "safe",
+        "privacy",
+        "digital",
+        "security",
+        "score"
+      ]
     },
     {
       "question": "What is SENTINEL?",
-      "answer": "The SENTINEL domain (ScamShield) analyzes texts, emails, and messages to detect potential scams and threats.",
-      "category": "domains"
+      "answer": "SENTINEL analyzes texts, emails, and messages to quickly identify potential scams and threats. It classifies content as safe or suspicious to keep you protected.",
+      "category": "domains",
+      "aliases": [
+        "can you check this email for a scam?",
+        "Does this look suspicious?",
+        "Can you detect scams?",
+        "Is this link/message dangerous?",
+        "Can you detect fraud?",
+        "How do I know if something is a scam?",
+        "Is this message a scam?"
+      ],
+      "keywords": [
+        "scam",
+        "sentinel",
+        "scamshield",
+        "suspicious",
+        "fraud",
+        "dangerous",
+        "threats"
+      ]
     },
     {
       "question": "What is NEXUS?",
-      "answer": "The NEXUS domain correlates threats across networks to provide cross-domain intelligence and early warnings.",
-      "category": "domains"
+      "answer": "NEXUS provides cross-domain intelligence by finding connections across all your domains. It uncovers hidden relationships\u2014like how sleep patterns might affect your academics\u2014to give you early warnings.",
+      "category": "domains",
+      "aliases": [
+        "How are all these things connected?",
+        "How do the six domains work together?",
+        "Can SANKALP connect different risks?",
+        "Can one problem affect another domain?",
+        "How does cross-domain intelligence work?",
+        "how are these domains connected?"
+      ],
+      "keywords": [
+        "nexus",
+        "connected",
+        "cross-domain",
+        "relationships",
+        "together"
+      ]
     },
     {
       "question": "What is the dashboard?",
-      "answer": "The Command Center dashboard gives you a unified overview of all your domain health scores and priority actions.",
-      "category": "navigation"
+      "answer": "The Command Center dashboard acts as your single pane of glass, giving you immediate visibility into domain health scores and priority Next Best Actions.",
+      "category": "navigation",
+      "aliases": [
+        "What is the Command Center?"
+      ],
+      "keywords": [
+        "dashboard",
+        "home",
+        "center"
+      ]
     },
     {
       "question": "How does SANKALP generate insights?",
-      "answer": "SANKALP uses a deterministic intelligence engine built on FastAPI that analyzes your raw domain data without relying on external hallucination-prone LLMs.",
-      "category": "intelligence"
+      "answer": "SANKALP relies entirely on a deterministic intelligence engine built on FastAPI, analyzing your actual data locally without relying on hallucination-prone LLMs.",
+      "category": "intelligence",
+      "aliases": [
+        "Is SANKALP using real data or demo/simulated data?",
+        "Does the chatbot use an external AI?"
+      ],
+      "keywords": [
+        "insights",
+        "generate",
+        "ai",
+        "llm",
+        "data"
+      ]
     },
     {
       "question": "Are the intelligence recommendations real?",
       "answer": "Yes, all recommendations are generated from your actual data by the backend intelligence layer.",
-      "category": "intelligence"
+      "category": "intelligence",
+      "aliases": [],
+      "keywords": []
     },
     {
       "question": "What does the overall health score mean?",
       "answer": "It's a weighted aggregate of your performance across the FOCUS, PULSE, TRAJECTORY, and SHIELD domains.",
-      "category": "dashboard"
+      "category": "dashboard",
+      "aliases": [],
+      "keywords": []
     },
     {
       "question": "What are cross-domain insights?",
       "answer": "These are intelligent observations generated when signals from multiple domains (e.g., poor sleep in PULSE and dropped grades in FOCUS) correlate to form a bigger picture.",
-      "category": "intelligence"
+      "category": "intelligence",
+      "aliases": [],
+      "keywords": []
     },
     {
       "question": "How does threat analysis work?",
       "answer": "The SENTINEL domain uses deterministic rules and known signatures to classify text content as safe, suspicious, or a scam.",
-      "category": "security"
+      "category": "security",
+      "aliases": [],
+      "keywords": []
     },
     {
       "question": "What should I do if a threat is detected?",
       "answer": "Do not interact with the suspicious content, block the sender, and follow the priority actions listed in your SHIELD dashboard.",
-      "category": "security"
+      "category": "security",
+      "aliases": [],
+      "keywords": []
     },
     {
       "question": "How does authentication work?",
       "answer": "SANKALP uses secure HTTP-only cookies and JWT tokens to verify your identity and protect your session.",
-      "category": "security"
+      "category": "security",
+      "aliases": [],
+      "keywords": []
     },
     {
       "question": "How do I use the dashboard?",
       "answer": "Review your domain health grid daily, check the glowing Next Best Action banner, and complete your Priority Actions.",
-      "category": "navigation"
+      "category": "navigation",
+      "aliases": [],
+      "keywords": []
     },
     {
       "question": "How does SANKALP protect user data?",
       "answer": "SANKALP enforces strict Role-Based Access Control (RBAC), data isolation boundaries, and deterministic processing to ensure privacy.",
-      "category": "security"
+      "category": "security",
+      "aliases": [],
+      "keywords": []
     },
     {
       "question": "What does \"insufficient data\" mean?",
       "answer": "It means a domain hasn't collected enough signals (like study hours or grades) to generate a reliable health score or trend.",
-      "category": "dashboard"
+      "category": "dashboard",
+      "aliases": [],
+      "keywords": []
     },
     {
       "question": "How can I improve my recommendations?",
       "answer": "Interact with the platform more! Log your study sessions in FOCUS and update your grades in PULSE to give the intelligence engine more context.",
-      "category": "general"
+      "category": "general",
+      "aliases": [],
+      "keywords": []
+    },
+    {
+      "question": "What happens when the chatbot doesn't know something?",
+      "aliases": [
+        "Does the chatbot hallucinate?",
+        "What if it doesn't know?"
+      ],
+      "answer": "I am designed to provide a safe fallback response if I cannot confidently answer your question. I will never hallucinate or invent functionality that doesn't exist.",
+      "category": "intelligence",
+      "keywords": [
+        "know",
+        "chatbot",
+        "hallucinate",
+        "fallback",
+        "wrong"
+      ]
+    },
+    {
+      "question": "Who is SANKALP for?",
+      "aliases": [
+        "Is this for students?"
+      ],
+      "answer": "SANKALP is designed primarily for students and continuous learners managing academics, career development, and digital safety.",
+      "category": "general",
+      "keywords": [
+        "who",
+        "students",
+        "target",
+        "audience"
+      ]
+    },
+    {
+      "question": "Is SANKALP using real data or demo/simulated data?",
+      "aliases": [
+        "Is this real data?"
+      ],
+      "answer": "SANKALP processes the actual data you input or connect. The intelligence engine generates Next Best Actions strictly from the signals provided within your local environment.",
+      "category": "intelligence",
+      "keywords": []
+    },
+    {
+      "question": "What are Next Best Actions?",
+      "aliases": [
+        "How do I know what to do next?",
+        "what are Next Best Actions?",
+        "what are priority actions?"
+      ],
+      "answer": "Next Best Actions are prioritized recommendations surfaced from your current domain signals. Instead of only showing you a score or warning, SANKALP translates the detected situation into a concrete action you can take next.",
+      "category": "dashboard",
+      "keywords": [
+        "nba",
+        "actions",
+        "priorities",
+        "recommendations"
+      ]
+    },
+    {
+      "question": "Does the chatbot use an external AI?",
+      "aliases": [
+        "does this use an external AI?",
+        "Is there an LLM?",
+        "Is this ChatGPT?"
+      ],
+      "answer": "No. The chatbot operates entirely on a static, local FAQ knowledge base using deterministic fuzzy matching. It does not make any external API calls or use an LLM, ensuring complete privacy and zero hallucinations.",
+      "category": "security",
+      "keywords": []
     }
   ]
 }
