@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation"
 import { motion } from "framer-motion"
 import { DOMAINS, DOMAIN_LIST, DomainId } from "@/lib/domains"
 import { ArrowLeft } from "lucide-react"
+import { ChatWidget } from "@/components/chatbot/ChatWidget"
 
 export function DomainShell({
   domainId,
@@ -61,6 +62,7 @@ export function DomainShell({
           {children}
         </motion.div>
       </main>
+      <ChatWidget />
     </div>
   )
 }
