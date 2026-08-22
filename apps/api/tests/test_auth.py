@@ -1,6 +1,6 @@
 from fastapi.testclient import TestClient
 from sqlalchemy.orm import Session
-from app.main import app
+
 
 def test_register_user(client: TestClient, db: Session):
     response = client.post(
@@ -71,7 +71,7 @@ def test_protected_route_with_token(client: TestClient, db: Session):
         "/api/v1/auth/register",
         json={"email": "me@example.com", "password": "securepassword123"}
     )
-    login_res = client.post(
+    client.post(
         "/api/v1/auth/login",
         json={"email": "me@example.com", "password": "securepassword123"}
     )

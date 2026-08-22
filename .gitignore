@@ -39,6 +39,10 @@ venv/
 ENV/
 env/
 
+# sqlite
+*.db
+test.db
+
 # docker
 .docker/
 docker-volumes/

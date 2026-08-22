@@ -26,6 +26,7 @@ app.add_middleware(
 async def http_exception_handler(request: Request, exc: StarletteHTTPException):
     # Convert standard HTTP exceptions to our ErrorResponse format
     error_code = "NOT_FOUND" if exc.status_code == 404 else "INTERNAL_ERROR"
+    if exc.status_code == 400: error_code = "BAD_REQUEST"
     if exc.status_code == 401: error_code = "UNAUTHORIZED"
     if exc.status_code == 403: error_code = "FORBIDDEN"
     if exc.status_code == 409: error_code = "CONFLICT"

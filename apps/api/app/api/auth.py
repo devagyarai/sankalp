@@ -5,6 +5,7 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from app.core.auth import require_authenticated_user
+from app.core.config import settings
 from app.core.database import get_db
 from app.core.security import create_access_token, get_password_hash, verify_password
 from app.models.user import User, UserProfile
@@ -81,7 +82,7 @@ def login(user_in: UserLogin, response: Response, db: Session = Depends(get_db))
         max_age=int(access_token_expires.total_seconds()),
         expires=int(access_token_expires.total_seconds()),
         samesite="lax",
-        secure=False, # Should be True in prod!
+        secure=settings.APP_ENV == "production",
     )
     
     return StandardResponse(
@@ -95,7 +96,7 @@ def logout(response: Response):
         key="access_token",
         httponly=True,
         samesite="lax",
-        secure=False
+        secure=settings.APP_ENV == "production",
     )
     return StandardResponse(success=True, data=None)
 
