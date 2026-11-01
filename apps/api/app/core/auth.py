@@ -15,6 +15,27 @@ def get_current_user(
     request: Request,
     db: Session = Depends(get_db)
 ) -> User | None:
+    # ---------------------------------------------------------
+    # DEVELOPMENT MOCK AUTHENTICATION
+    # Bypasses JWT check if test-token is provided in headers
+    # ---------------------------------------------------------
+    auth_header = request.headers.get("Authorization")
+    if auth_header and auth_header.startswith("Bearer test-token-"):
+        role = "STUDENT" if "student" in auth_header else "COMMANDER"
+        email = f"mock_{role.lower()}@sankalp.local"
+        
+        # Find or create mock user
+        user = db.scalar(select(User).where(User.email == email))
+        if not user:
+            user = User(email=email, role=role, is_active=True)
+            db.add(user)
+            db.commit()
+            db.refresh(user)
+        return user
+
+    # ---------------------------------------------------------
+    # STANDARD JWT AUTHENTICATION
+    # ---------------------------------------------------------
     token = get_token_from_cookie(request)
     if not token:
         return None

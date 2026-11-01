@@ -13,6 +13,13 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')
 # Load .env from project root
 load_dotenv(os.path.join(os.path.dirname(__file__), '..', '..', '..', '.env'))
 
+from sqlalchemy.dialects.postgresql import JSONB
+from sqlalchemy.ext.compiler import compiles
+
+@compiles(JSONB, "sqlite")
+def compile_jsonb_sqlite(type_, compiler, **kw):
+    return "JSON"
+
 from app.models.base import Base
 
 # this is the Alembic Config object, which provides

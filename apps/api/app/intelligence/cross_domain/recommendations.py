@@ -3,18 +3,32 @@ from app.intelligence.cross_domain.models import Insight
 from app.schemas.intelligence import IntelligenceRecommendationSchema
 
 
+def _to_schema(rec) -> IntelligenceRecommendationSchema:
+    if isinstance(rec, IntelligenceRecommendationSchema):
+        return rec
+    return IntelligenceRecommendationSchema(
+        domain=getattr(rec, "domain", "general"),
+        priority=getattr(rec, "priority", "medium"),
+        title=getattr(rec, "title", ""),
+        reason=getattr(rec, "reason", ""),
+        evidence=getattr(rec, "evidence", []),
+        action_url=getattr(rec, "action_url", None),
+        confidence=getattr(rec, "confidence", 1.0),
+    )
+
+
 def aggregate_and_rank_recommendations(
-    domain_recs: list[IntelligenceRecommendationSchema], 
+    domain_recs: list, 
     insights: list[Insight]
 ) -> list[IntelligenceRecommendationSchema]:
     """
     Deduplicates, scores, and ranks all recommendations from domains and cross-domain insights.
     """
-    all_recs = list(domain_recs)
+    all_recs: list[IntelligenceRecommendationSchema] = [_to_schema(r) for r in domain_recs]
     
     # Extract recommendations from insights
     for insight in insights:
-        all_recs.extend(insight.recommended_actions)
+        all_recs.extend([_to_schema(r) for r in insight.recommended_actions])
         
     # Deduplicate by title (simple dedup)
     unique_recs = {}

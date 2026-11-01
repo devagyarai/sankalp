@@ -1,6 +1,6 @@
-# Cypherverse CHAT-1 Knowledge Base
+# Graviton CHAT-1 Knowledge Base
 
-This directory contains the foundational knowledge base for the Cypherverse CHAT-1 deterministic FAQ assistant.
+This directory contains the foundational knowledge base for the Graviton CHAT-1 deterministic FAQ assistant.
 
 ## Files
 - `faq.json`: The source of truth for Sankalp-specific FAQ entries.
