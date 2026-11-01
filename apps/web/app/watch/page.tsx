@@ -11,7 +11,7 @@ import { useAuth } from "@/lib/auth-context"
 type AnalysisState = 'IDLE' | 'ANALYZING' | 'RESULT'
 
 export default function StitchWatchPage() {
-  const { currentUser, users } = useAuth()
+  const { currentUser } = useAuth()
   
   // Student State
   const [analysisState, setAnalysisState] = useState<AnalysisState>('IDLE')
@@ -292,7 +292,7 @@ export default function StitchWatchPage() {
                {analysisState === 'RESULT' && (
                  <motion.div 
                    initial={{ opacity: 0 }}
-                   animate={{ opacity: 1, scale: [1, 1.2, 1], opacity: [0.6, 1, 0.6] }}
+                   animate={{ scale: [1, 1.2, 1], opacity: [0.6, 1, 0.6] }}
                    transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
                    className={`absolute -top-12 -right-12 w-48 h-48 blur-[50px] rounded-full pointer-events-none ${
                      riskLevel === 'HIGH' ? 'bg-red-500/20' : 'bg-[#00e676]/20'

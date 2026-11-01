@@ -43,7 +43,7 @@ export default function AboutPage() {
               <Cpu className="w-8 h-8 text-[#00e5ff] mb-6" />
               <h3 className="text-xl font-bold text-white mb-3 tracking-wide">Intelligent Processing</h3>
               <p className="text-zinc-400 font-medium leading-relaxed">
-                We process complex data streams to give you the exact insight you need, exactly when you need it. From academic signals to scam detection, it's all connected.
+                We process complex data streams to give you the exact insight you need, exactly when you need it. From academic signals to scam detection, it&apos;s all connected.
               </p>
             </motion.div>
             
@@ -69,7 +69,7 @@ export default function AboutPage() {
               <Globe className="w-8 h-8 text-[#ff3d00] mb-6" />
               <h3 className="text-xl font-bold text-white mb-3 tracking-wide">The Unified Vision</h3>
               <p className="text-zinc-400 font-medium leading-relaxed max-w-2xl">
-                SANKALP wasn't built to be just another dashboard. It was built to be a command center. A place where you don't just view data, but where you gain the intelligence necessary to make the next best action in your career and life.
+                SANKALP wasn&apos;t built to be just another dashboard. It was built to be a command center. A place where you don&apos;t just view data, but where you gain the intelligence necessary to make the next best action in your career and life.
               </p>
             </motion.div>
           </div>

@@ -10,7 +10,7 @@ import { useAuth } from "@/lib/auth-context"
 import { fetchApi } from "@/lib/api-client"
 
 export default function ConnectPage() {
-  const { currentUser, users } = useAuth()
+  const { currentUser } = useAuth()
   
   // Student State
   const [isInitialized, setIsInitialized] = useState(false)

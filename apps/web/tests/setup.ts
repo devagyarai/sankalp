@@ -12,5 +12,9 @@ class IntersectionObserverMock {
 
 vi.stubGlobal('IntersectionObserver', IntersectionObserverMock);
 if (typeof window !== 'undefined') {
-  (window as any).IntersectionObserver = IntersectionObserverMock;
+  Object.defineProperty(window, 'IntersectionObserver', {
+    writable: true,
+    configurable: true,
+    value: IntersectionObserverMock,
+  });
 }

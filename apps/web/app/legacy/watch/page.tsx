@@ -3,7 +3,7 @@
 import { DomainShell } from "@/components/domain/shell"
 import { DomainHeader } from "@/components/domain/header"
 import { LivingCard } from "@/components/ui/living-card"
-import { AlertOctagon, Link as LinkIcon, AlertTriangle, Fingerprint, MessageSquareWarning } from "lucide-react"
+import { AlertOctagon, Link as LinkIcon, MessageSquareWarning } from "lucide-react"
 import { motion } from "framer-motion"
 
 export default function WatchPage() {
@@ -59,7 +59,7 @@ export default function WatchPage() {
                  <div>
                    <h5 className="text-amber-400 font-medium text-sm mb-1">Urgency Language</h5>
                    <p className="text-muted-foreground text-sm">
-                     The URL slug "verify-account" implies an urgent action is required, attempting to bypass critical thinking.
+                     The URL slug &quot;verify-account&quot; implies an urgent action is required, attempting to bypass critical thinking.
                    </p>
                  </div>
                </div>

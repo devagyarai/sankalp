@@ -13,6 +13,15 @@ import { fetchApi } from "@/lib/api-client"
 
 type MappingState = 'IDLE' | 'SCANNING' | 'COMPLETE'
 
+interface SkillItem {
+  name: string;
+  proficiency: number;
+}
+
+interface CareerProfileData {
+  current_skills: SkillItem[];
+}
+
 type SkillLevel = {
   name: string;
   initial: number;
@@ -24,19 +33,17 @@ export default function ShapePage() {
   const [mappingState, setMappingState] = useState<MappingState>('IDLE')
   const [newSkillName, setNewSkillName] = useState('')
   const [skills, setSkills] = useState<SkillLevel[]>([])
-  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
     if (currentUser.role === 'STUDENT') {
-      fetchApi<any>('/career/profile')
+      fetchApi<CareerProfileData>('/career/profile')
         .then(data => {
-          setSkills(data.current_skills.map((s: any) => ({
+          setSkills(data.current_skills.map((s: SkillItem) => ({
             name: s.name,
             initial: s.proficiency,
             final: Math.min(100, s.proficiency + 15),
             level: s.proficiency > 75 ? 'Advanced' : s.proficiency > 40 ? 'Intermediate' : 'Novice'
           })))
-          setIsLoading(false)
         })
         .catch(err => console.error("Failed to fetch profile:", err))
     }
@@ -58,13 +65,13 @@ export default function ShapePage() {
     
     try {
       // Actually save it to the backend
-      const data = await fetchApi<any>('/career/profile/skills', {
+      const data = await fetchApi<CareerProfileData>('/career/profile/skills', {
         method: 'POST',
         body: JSON.stringify({ name: tempSkill.name })
       });
       
       // Update with truth from server
-      setSkills(data.current_skills.map((s: any) => ({
+      setSkills(data.current_skills.map((s: SkillItem) => ({
         name: s.name,
         initial: s.proficiency,
         final: Math.min(100, s.proficiency + 15),

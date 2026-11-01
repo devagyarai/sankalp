@@ -6,8 +6,6 @@ import { FocusWidget } from "@/components/focus-widget"
 import { NBABanner } from "@/components/nba-banner"
 import { LivingCard } from "@/components/ui/living-card"
 import { EmptyState } from "@/components/ui/empty-state"
-import { determineNextBestAction } from "@/lib/nba-engine"
-import mockData from "@/data/focus-mock.json"
 import { PieChart } from "lucide-react"
 
 export default function ExplorePage() {

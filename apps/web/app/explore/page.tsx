@@ -6,10 +6,11 @@ import { StitchDomainHeader } from "@/components/stitch/stitch-domain-header"
 import { StitchFocusWidget } from "@/components/stitch/stitch-focus-widget"
 import { StitchNBABanner } from "@/components/stitch/stitch-nba-banner"
 import { StitchGlassCard } from "@/components/stitch/stitch-glass-card"
-import { PieChart, Play, Square, Pause, Loader2, Users, Activity, Target } from "lucide-react"
+import { PieChart, Play, Square, Pause, Users, Activity, Target } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 import { useAuth } from "@/lib/auth-context"
 import { fetchApi } from "@/lib/api-client"
+import { IntelligenceRecommendationSchema } from "@/types/intelligence"
 
 export default function StitchExplorePage() {
   const { currentUser, users } = useAuth()
@@ -52,33 +53,34 @@ export default function StitchExplorePage() {
     setTimeElapsed(0)
   }
 
-  const mockNba = {
-    id: "explore-nba",
+  const mockNba: IntelligenceRecommendationSchema = {
     title: "Deep Work Session Recommended",
-    description: "Graviton metrics suggest peak cognitive availability right now. Engage a 45-minute focus block on 'Advanced React Patterns'.",
+    reason: "Graviton metrics suggest peak cognitive availability right now. Engage a 45-minute focus block on 'Advanced React Patterns'.",
     domain: "explore",
     priority: "high",
     confidence: 0.92,
     action_url: "#",
-    reason: "Based on biometric telemetry and historical performance data."
+    evidence: ["Based on biometric telemetry and historical performance data."]
   }
 
-  const mockRecommendations = [
+  const mockRecommendations: IntelligenceRecommendationSchema[] = [
     {
       title: "Review Backend Architecture",
-      description: "You have upcoming project deadlines.",
+      reason: "You have upcoming project deadlines.",
       domain: "focus",
       priority: "high",
       confidence: 0.85,
-      reason: "Historical trend indicates a need to revisit this topic before exams."
+      evidence: ["Historical trend indicates a need to revisit this topic before exams."],
+      action_url: "/explore"
     },
     {
       title: "Complete UI/UX Module",
-      description: "Module is 80% complete.",
+      reason: "Module is 80% complete.",
       domain: "focus",
       priority: "medium",
       confidence: 0.70,
-      reason: "Finishing this will unlock the next career trajectory node."
+      evidence: ["Finishing this will unlock the next career trajectory node."],
+      action_url: "/shape"
     }
   ]
 
@@ -194,13 +196,13 @@ export default function StitchExplorePage() {
       
       <div className="space-y-8 flex-1">
         {/* Prioritized Insight Action */}
-        <StitchNBABanner nba={mockNba as any} onActionStart={handleToggleSession} />
+        <StitchNBABanner nba={mockNba} onActionStart={handleToggleSession} />
 
         {/* Study Planning Workspace */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="lg:col-span-2">
              {/* Note: StitchFocusWidget filters for domain === 'focus' */}
-            <StitchFocusWidget recommendations={mockRecommendations as any} />
+            <StitchFocusWidget recommendations={mockRecommendations} />
           </div>
           
           <div className="space-y-6">

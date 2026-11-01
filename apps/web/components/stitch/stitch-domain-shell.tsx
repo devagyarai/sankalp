@@ -1,12 +1,23 @@
 "use client"
 
 import Link from "next/link"
-import { usePathname } from "next/navigation"
 import { motion } from "framer-motion"
 import { DomainId } from "@/lib/domains"
 import { ArrowLeft, Compass, Shapes, LineChart, Shield, Radar, Link as LinkIcon } from "lucide-react"
 
-export const STITCH_DOMAINS: Record<DomainId, any> = {
+export interface StitchDomainConfig {
+  id: string;
+  name: string;
+  originalName: string;
+  icon: React.ComponentType<{ className?: string }>;
+  color: string;
+  border: string;
+  bg: string;
+  shadow: string;
+  path: string;
+}
+
+export const STITCH_DOMAINS: Record<DomainId, StitchDomainConfig> = {
   explore: { id: "explore", name: "EXPLORE", originalName: "Focus", icon: Compass, color: "text-[#00E5FF]", border: "border-[#00E5FF]/50", bg: "bg-[#00E5FF]/10", shadow: "shadow-[0_0_20px_rgba(0,229,255,0.4)]", path: "/explore" },
   shape: { id: "shape", name: "SHAPE", originalName: "Trajectory", icon: Shapes, color: "text-[#FF3D00]", border: "border-[#FF3D00]/50", bg: "bg-[#FF3D00]/10", shadow: "shadow-[0_0_20px_rgba(255,61,0,0.4)]", path: "/shape" },
   insight: { id: "insight", name: "INSIGHT", originalName: "Pulse", icon: LineChart, color: "text-[#00E676]", border: "border-[#00E676]/50", bg: "bg-[#00E676]/10", shadow: "shadow-[0_0_20px_rgba(0,230,118,0.4)]", path: "/insight" },
@@ -68,7 +79,6 @@ export function StitchDomainShell({
 }
 
 function DomainSwitcher({ currentDomainId }: { currentDomainId: DomainId }) {
-  const pathname = usePathname()
 
   return (
     <div className="hidden md:flex items-center gap-2 bg-zinc-950/50 border border-zinc-900 p-1 rounded-2xl">

@@ -1,11 +1,11 @@
 "use client";
 
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
-import { usePathname, useRouter } from 'next/navigation';
-import { authClient } from '@/lib/auth/auth-client';
-import { UserResponse } from '@/lib/auth/auth-types';
-import { Activity, Bell, Compass, LayoutDashboard, Shield, ShieldAlert, Settings, User, LogOut, Rocket, ChevronUp, Check } from "lucide-react";
+import { usePathname } from 'next/navigation';
+// Auth handled by context
+// User types from context
+import { Activity, Bell, Compass, LayoutDashboard, Shield, ShieldAlert, User, Rocket, ChevronUp, Check } from "lucide-react";
 import { useAuth } from '@/lib/auth-context';
 import { cn } from "@/lib/utils";
 import { ChatWidget } from '@/components/chatbot/ChatWidget';
@@ -22,7 +22,7 @@ const NAVIGATION = [
 
 export function StitchAppLayout({ children }: { children: React.ReactNode }) {
     const pathname = usePathname();
-    const router = useRouter();
+    // Navigation via links
     const { currentUser, users, setCurrentUser } = useAuth();
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 

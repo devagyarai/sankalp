@@ -12,7 +12,7 @@ import { StitchOverallHealthCard } from '@/components/stitch/dashboard/stitch-ov
 import { StitchDomainHealthGrid } from '@/components/stitch/dashboard/stitch-domain-health-grid';
 import { StitchCrossDomainInsightCard } from '@/components/stitch/dashboard/stitch-cross-domain-insight-card';
 import { StitchPriorityActions } from '@/components/stitch/dashboard/stitch-priority-actions';
-import { useAuth, UserProfile } from '@/lib/auth-context';
+import { useAuth } from '@/lib/auth-context';
 
 export default function StitchDashboardPage() {
     const { currentUser, users, setCurrentUser } = useAuth();
@@ -36,10 +36,10 @@ export default function StitchDashboardPage() {
                 Safety: currentUser.metrics?.safetyScore || 95
             },
             trends: [
-                { domain: 'Study', direction: 'IMPROVING', value: 5, timeframe: '7d' },
-                { domain: 'Academic', direction: 'DECLINING', value: 12, timeframe: '7d' },
-                { domain: 'Career', direction: 'STABLE', value: 0, timeframe: '7d' },
-                { domain: 'Safety', direction: 'IMPROVING', value: 2, timeframe: '7d' }
+                { domain: 'Study', direction: 'IMPROVING', description: '+5% over 7d' },
+                { domain: 'Academic', direction: 'DECLINING', description: '-12% over 7d' },
+                { domain: 'Career', direction: 'STABLE', description: '0% over 7d' },
+                { domain: 'Safety', direction: 'IMPROVING', description: '+2% over 7d' }
             ],
             data_quality: {
                 study: 'sufficient',
@@ -54,6 +54,7 @@ export default function StitchDashboardPage() {
                     domain: "FOCUS",
                     priority: "critical",
                     confidence: 0.94,
+                    evidence: [],
                     action_url: "/explore"
                 },
                 {
@@ -62,6 +63,7 @@ export default function StitchDashboardPage() {
                     domain: "SECURE",
                     priority: "high",
                     confidence: 0.85,
+                    evidence: [],
                     action_url: "/secure"
                 }
             ],
@@ -73,16 +75,24 @@ export default function StitchDashboardPage() {
                     domain: "CROSS-DOMAIN",
                     type: "correlation",
                     severity: 85,
+                    confidence: 0.9,
                     evidence: ["Study hours logged post 2AM", "Failed simulated phishing test at 2:30AM"],
                     recommended_actions: [
-                        { title: "Enforce sleep schedule lockdown", type: "system_policy" }
+                        {
+                            domain: "focus",
+                            priority: "high",
+                            title: "Enforce sleep schedule lockdown",
+                            reason: "Mitigates late-night cognitive fatigue and phishing vulnerability",
+                            evidence: [],
+                            action_url: "/explore",
+                            confidence: 0.9
+                        }
                     ],
-                    metadata: {}
+                    created_at: new Date().toISOString()
                 }
-            ]
+            ],
+            priority_actions: ["Optimize Study Schedule", "Review App Permissions"]
         };
-
-        setLoading(true);
         setTimeout(() => {
             setOverview(mockData);
             setLoading(false);
