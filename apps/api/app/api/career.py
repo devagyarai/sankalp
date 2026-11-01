@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 from app.core.auth import require_authenticated_user
 from app.core.database import get_db
 from app.models.user import User
-from app.schemas.career import SkillProfile, AddSkillRequest
+from app.schemas.career import AddSkillRequest, SkillProfile
 from app.schemas.common import StandardResponse
 from app.services import career as career_service
 
