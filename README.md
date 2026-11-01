@@ -1,7 +1,8 @@
 # Sankalp Platform
 
 ## Overview
-Sankalp is a modular, multi-purpose intelligent platform designed to integrate personalized planning, productivity intelligence, career and skill-gap intelligence, digital safety assessment, and an integrated deterministic FAQ assistant (Cypherverse CHAT-1).
+Sankalp is a modular, multi-purpose intelligent platform designed to integrate personalized planning, productivity intelligence, career and skill-gap intelligence, digital safety assessment, and an integrated deterministic FAQ assistant (Cypherverse CHAT-1)..
+
 
 ## Current Project Status
 **Foundation Stage**: The complete Sankalp domain functionality has NOT yet been implemented. This repository currently establishes only the initial technical foundation and the CHAT-1 knowledge base infrastructure.
