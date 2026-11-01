@@ -19,7 +19,7 @@ const questions = [
   },
   {
     q: "Are the six domains connected?",
-    a: "Yes. While each domain focuses on a different aspect, SANKALP brings those perspectives together into a shared intelligence layer (Cypherverse) to help you make clearer decisions."
+    a: "Yes. While each domain focuses on a different aspect, SANKALP brings those perspectives together into a shared intelligence layer (Graviton) to help you make clearer decisions."
   },
   {
     q: "Do I need technical knowledge to use SANKALP?",

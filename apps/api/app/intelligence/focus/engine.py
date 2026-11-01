@@ -20,7 +20,7 @@ def analyze_study_metrics(db: Session, user: User) -> IntelligenceOutput:
     sessions = db.scalars(
         select(StudySession)
         .where(StudySession.user_id == user.id)
-        .order_by(StudySession.start_time.desc())
+        .order_by(StudySession.started_at.desc())
     ).all()
     
     if not plan:

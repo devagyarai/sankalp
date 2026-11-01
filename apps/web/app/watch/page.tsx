@@ -23,11 +23,34 @@ export default function StitchWatchPage() {
     setAnalysisState('ANALYZING')
     
     setTimeout(() => {
-      // Very simple logic: if input contains 'sankalp' or 'safe', mark as low risk. Otherwise high risk.
-      const isSafe = inputValue.toLowerCase().includes('safe') || inputValue.toLowerCase().includes('sankalp')
-      setRiskLevel(isSafe ? 'LOW' : 'HIGH')
-      setAnalysisState('RESULT')
-    }, 3000)
+      const val = inputValue.toLowerCase();
+      const hasScamPatterns = 
+        val.includes('verify-account') || 
+        val.includes('urgent') || 
+        val.includes('suspended') || 
+        val.includes('wire transfer') || 
+        val.includes('bit.ly') || 
+        val.includes('free-internship') || 
+        val.includes('login-security') ||
+        val.includes('lottery') ||
+        val.includes('claim-reward') ||
+        val.includes('password') ||
+        val.includes('crypto');
+
+      const isKnownSafe = 
+        val.includes('sankalp') || 
+        val.includes('safe') || 
+        val.includes('.edu') || 
+        val.includes('github.com') || 
+        val.includes('coursera.org') ||
+        val.includes('google.com') ||
+        val.includes('wikipedia.org');
+
+      // If it contains explicit scam indicators, flag as HIGH risk. If it's known safe or educational, flag as LOW.
+      const isSafe = isKnownSafe && !hasScamPatterns;
+      setRiskLevel(isSafe ? 'LOW' : 'HIGH');
+      setAnalysisState('RESULT');
+    }, 1500);
   }
 
   // COMMANDER VIEW
@@ -218,7 +241,7 @@ export default function StitchWatchPage() {
                         <div>
                           <h5 className="text-red-400 font-bold text-sm mb-1 uppercase tracking-wide">Suspicious Structure</h5>
                           <p className="text-zinc-400 text-sm leading-relaxed font-medium">
-                            The input pattern mimics known phishing or spam vectors. It is not associated with any trusted provider in the Cypherverse registry.
+                            The input pattern mimics known phishing or spam vectors. It is not associated with any trusted provider in the Graviton registry.
                           </p>
                         </div>
                       </div>

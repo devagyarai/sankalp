@@ -28,7 +28,7 @@ export default function AboutPage() {
               About <span className="text-[#00e5ff]">SANKALP</span>
             </h1>
             <p className="text-lg text-zinc-400 font-medium max-w-2xl mx-auto leading-relaxed">
-              SANKALP is a next-generation intelligence hub designed to seamlessly weave together study optimization, career trajectory tracking, and digital security in the Cypherverse.
+              SANKALP is a next-generation intelligence hub designed to seamlessly weave together study optimization, career trajectory tracking, and digital security in Graviton.
             </p>
           </motion.div>
 

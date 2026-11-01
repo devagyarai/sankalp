@@ -1,5 +1,6 @@
 import Link from "next/link"
-import { MessageSquare, Rocket } from "lucide-react"
+import { Rocket } from "lucide-react"
+import { ChatWidget } from "@/components/chatbot/ChatWidget"
 
 export function StitchFooter() {
   return (
@@ -33,10 +34,8 @@ export function StitchFooter() {
         </div>
       </div>
 
-      {/* Floating Chat Widget Icon (matches the design) */}
-      <button className="fixed bottom-6 right-6 w-14 h-14 rounded-full bg-zinc-950 border-2 border-[#00e5ff]/50 text-[#00e5ff] flex items-center justify-center shadow-[0_0_20px_rgba(0,229,255,0.3)] hover:bg-[#111e36] hover:scale-110 hover:shadow-[0_0_30px_rgba(0,229,255,0.6)] transition-all z-50">
-        <MessageSquare className="w-6 h-6" />
-      </button>
+      {/* Interactive Chat Widget */}
+      <ChatWidget />
     </footer>
   )
 }

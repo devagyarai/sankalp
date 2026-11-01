@@ -12,12 +12,15 @@ interface StitchNBABannerProps {
 }
 
 export function StitchNBABanner({ nba, onActionStart }: StitchNBABannerProps) {
-  if (!nba) return null
+  const [dismissed, setDismissed] = React.useState(false);
+
+  if (!nba || dismissed) return null;
 
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -10 }}
       transition={{ duration: 0.5, ease: "easeOut" }}
     >
       <StitchGlassCard className="border-[#00e5ff]/50 ring-1 ring-[#00e5ff]/20">
@@ -50,13 +53,14 @@ export function StitchNBABanner({ nba, onActionStart }: StitchNBABannerProps) {
           <div className="flex flex-col sm:flex-row gap-4 w-full md:w-auto mt-4 md:mt-0">
             <button 
               onClick={() => onActionStart(nba.action_url || "#")}
-              className="flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-[#00e5ff] hover:bg-[#00c9e0] text-black font-black uppercase tracking-wider transition-all duration-300 hover:scale-[1.02] shadow-[0_0_20px_rgba(0,229,255,0.4)] hover:shadow-[0_0_30px_rgba(0,229,255,0.6)]"
+              className="flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-[#00e5ff] hover:bg-[#00c9e0] text-black font-black uppercase tracking-wider transition-all duration-300 hover:scale-[1.02] shadow-[0_0_20px_rgba(0,229,255,0.4)] hover:shadow-[0_0_30px_rgba(0,229,255,0.6)] cursor-pointer"
             >
               <Play className="w-4 h-4" fill="currentColor" />
               Engage Protocol
             </button>
             <button 
-              className="group flex items-center justify-center gap-2 px-6 py-3 rounded-xl border border-zinc-700 bg-zinc-900/50 hover:bg-zinc-800 text-zinc-300 font-bold uppercase tracking-wider transition-all duration-300"
+              onClick={() => setDismissed(true)}
+              className="group flex items-center justify-center gap-2 px-6 py-3 rounded-xl border border-zinc-700 bg-zinc-900/50 hover:bg-zinc-800 text-zinc-300 font-bold uppercase tracking-wider transition-all duration-300 cursor-pointer"
             >
               Acknowledge
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform text-[#00e5ff]" />

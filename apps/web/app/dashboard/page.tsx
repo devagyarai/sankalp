@@ -50,7 +50,7 @@ export default function StitchDashboardPage() {
             top_recommendations: currentUser.role === 'COMMANDER' ? [] : [
                 {
                     title: "Optimize Study Schedule",
-                    reason: "Cypherverse metrics indicate high fatigue during late-night coding sessions.",
+                    reason: "Graviton metrics indicate high fatigue during late-night coding sessions.",
                     domain: "FOCUS",
                     priority: "critical",
                     confidence: 0.94,

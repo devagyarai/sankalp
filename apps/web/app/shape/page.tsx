@@ -190,7 +190,7 @@ export default function ShapePage() {
       <StitchDomainHeader 
         domainId="shape"
         title="Understand where your skills can take you."
-        description="Map your current capabilities against potential career directions and discover what to learn next in the Cypherverse."
+        description="Map your current capabilities against potential career directions and discover what to learn next in Graviton."
       />
       
       <div className="flex-1 grid grid-cols-1 md:grid-cols-3 gap-6">

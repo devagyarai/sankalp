@@ -61,7 +61,7 @@ export default function ConnectPage() {
         <StitchDomainHeader 
           domainId="connect"
           title="System Integration Health"
-          description="Monitor fleet-wide data pipelines, API health, and node synchronization across the Cypherverse."
+          description="Monitor fleet-wide data pipelines, API health, and node synchronization across Graviton."
         />
         
         <div className="flex-1 grid grid-cols-1 lg:grid-cols-4 gap-6">
@@ -176,7 +176,7 @@ export default function ConnectPage() {
       <StitchDomainHeader 
         domainId="connect"
         title="Map the relationships between your digital identities."
-        description="Visualize and query the interconnected nodes of your data across the Cypherverse."
+        description="Visualize and query the interconnected nodes of your data across Graviton."
       />
       
       <div className="flex-1 grid grid-cols-1 lg:grid-cols-4 gap-6">

@@ -55,7 +55,7 @@ export default function StitchExplorePage() {
   const mockNba = {
     id: "explore-nba",
     title: "Deep Work Session Recommended",
-    description: "Cypherverse metrics suggest peak cognitive availability right now. Engage a 45-minute focus block on 'Advanced React Patterns'.",
+    description: "Graviton metrics suggest peak cognitive availability right now. Engage a 45-minute focus block on 'Advanced React Patterns'.",
     domain: "explore",
     priority: "high",
     confidence: 0.92,

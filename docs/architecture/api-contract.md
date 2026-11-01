@@ -256,7 +256,7 @@ Error Response:
 
 ### Chat
 **POST** `/api/v1/chat/query`
-- **Purpose**: Send query to Cypherverse CHAT-1
+- **Purpose**: Send query to Graviton CHAT-1
 - **Request**: `ChatQueryRequest` (message)
 - **Response**: `ChatQueryResponse` (answer OR fallback, confidence)
 - **Errors**: `UNAUTHORIZED`, `VALIDATION_ERROR`

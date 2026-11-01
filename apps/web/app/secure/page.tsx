@@ -152,7 +152,7 @@ export default function SecurePage() {
       <StitchDomainHeader 
         domainId="secure"
         title="Know how protected your digital life is."
-        description="Understand your digital safety posture and get prioritized recommendations to secure your online presence in the Cypherverse."
+        description="Understand your digital safety posture and get prioritized recommendations to secure your online presence in Graviton."
       />
       
       <div className="flex-1 grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -285,7 +285,7 @@ export default function SecurePage() {
                     )}
                   </div>
                   <p className="text-sm text-zinc-500 font-medium leading-relaxed">
-                    Your primary email is used for password recovery across 12 connected services in the Cypherverse. Securing it prevents a single point of failure.
+                    Your primary email is used for password recovery across 12 connected services in Graviton. Securing it prevents a single point of failure.
                   </p>
                 </motion.div>
               </div>

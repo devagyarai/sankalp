@@ -26,7 +26,7 @@ export function StitchConnectedSystem() {
             Different signals. One cosmic picture.
           </h2>
           <p className="text-lg text-zinc-400 max-w-2xl mx-auto font-medium">
-            Each domain focuses on a different aspect of your academic and digital life. SANKALP connects these signals through the Cypherverse to help you make clearer decisions.
+            Each domain focuses on a different aspect of your academic and digital life. SANKALP connects these signals through Graviton to help you make clearer decisions.
           </p>
         </motion.div>
 
